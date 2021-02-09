@@ -81,6 +81,7 @@
 - Code in _Emulator folder is newly added to the game
 - Other code is mostly reverse engineered (decompiled) from the original game and refined so it compiles as a VS project
 - Therefore commercial use of this project is not recommended
+- In order to join custom servers you can either set the "Server-IP" field to "Custom" or edit the **ServerIPS.csv** file in your Config folder
 - In order to use this version of the brick force aurora client, you have to edit the **Inventory.csv** file and add the following lines below "Change 5"
 ```
 Change 6	
