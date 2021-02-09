@@ -71,6 +71,8 @@ namespace _Emulator
 
 		private void hP2PManagerHandshake()
         {
+            Debug.Log("Doing P2P Handshake");
+
 			if (MyInfoManager.Instance.Status == 3 || MyInfoManager.Instance.Status == 4)
 			{
 				bool flag = false;

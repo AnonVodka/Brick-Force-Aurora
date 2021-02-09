@@ -132,8 +132,6 @@ public class ItemUpgradeDlg : Dialog
 
 	private int successUpgradePropID;
 
-	private bool[] useprops;
-
 	private int reqprop = -1;
 
 	private int curTier;

@@ -819,13 +819,19 @@ public class Gun : WeaponFunction
 		tutoInput = GameObject.Find("Main").GetComponent<TutoInput>();
 	}
 
+    // GUNSTATS: is being called
 	protected virtual void Modify()
 	{
-		WpnMod wpnMod = WeaponModifier.Instance.Get((int)weaponBy);
+
+        WeaponFunction component = GetComponent<WeaponFunction>();
+        TWeapon tWeapon = (TWeapon)GetComponent<Weapon>().tItem;
+
+        WpnMod wpnMod = WeaponModifier.Instance.Get((int)weaponBy);
+        Debug.Log("Gun::Modify");
 		if (wpnMod != null)
 		{
 			maxAmmo = wpnMod.maxAmmo;
-			magazine.max = wpnMod.maxMagazine;
+            magazine.max = wpnMod.maxMagazine;
 			speedFactor = wpnMod.fSpeedFactor;
 			AtkPow = wpnMod.fAtkPow;
 			Rigidity = wpnMod.fRigidity;
@@ -834,10 +840,10 @@ public class Gun : WeaponFunction
 			recoilYaw = wpnMod.recoilYaw;
 		}
 		WpnModEx ex = WeaponModifier.Instance.GetEx((int)weaponBy);
-		if (ex != null)
+        if (ex != null)
 		{
 			misSpeed = ex.misSpeed;
-			ThrowForce = ex.throwForce;
+            ThrowForce = ex.throwForce;
 			maxLauncherAmmo = ex.maxLauncherAmmo;
 			Radius2ndWpn = ex.radius2ndWpn;
 			Damage2ndWpn = ex.damage2ndWpn;
@@ -846,8 +852,6 @@ public class Gun : WeaponFunction
 			Radius1stWpn = ex.Radius1stWpn;
 			semiAutoMaxCyclicAmmo = ex.semiAutoMaxCyclicAmmo;
 		}
-		WeaponFunction component = GetComponent<WeaponFunction>();
-		TWeapon tWeapon = (TWeapon)GetComponent<Weapon>().tItem;
 		if (null != component && tWeapon != null)
 		{
 			Item item = MyInfoManager.Instance.GetItemBySequence(component.ItemSeq);
@@ -857,35 +861,36 @@ public class Gun : WeaponFunction
 			}
 			if (item != null)
 			{
-				int num = 0;
-				int grade = item.upgradeProps[num].grade;
-				if (grade > 0)
-				{
-					float value = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
-					AtkPow += value;
-				}
-				num = 2;
-				grade = item.upgradeProps[num].grade;
-				if (grade > 0)
-				{
-					float value2 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
-					recoilPitch += value2;
-				}
-				num = 3;
-				grade = item.upgradeProps[num].grade;
-				if (grade > 0)
-				{
-					float value3 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
-					rateOfFire += value3;
-				}
-				num = 4;
-				grade = item.upgradeProps[num].grade;
-				if (grade > 0)
-				{
-					float value4 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
-					maxAmmo += (int)value4;
-				}
-			}
+                //This code causes some weapons to not work
+                int num = 0;
+                int grade = item.upgradeProps[num].grade;
+                if (grade > 0)
+                {
+                    float value = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
+                    AtkPow += value;
+                }
+                num = 2;
+                grade = item.upgradeProps[num].grade;
+                if (grade > 0)
+                {
+                    float value2 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
+                    recoilPitch += value2;
+                }
+                num = 3;
+                grade = item.upgradeProps[num].grade;
+                if (grade > 0)
+                {
+                    float value3 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
+                    rateOfFire += value3;
+                }
+                num = 4;
+                grade = item.upgradeProps[num].grade;
+                if (grade > 0)
+                {
+                    float value4 = PimpManager.Instance.getValue((int)tWeapon.upgradeCategory, num, grade - 1);
+                    maxAmmo += (int)value4;
+                }
+            }
 		}
 	}
 

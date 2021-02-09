@@ -10,11 +10,11 @@ public class TutorHelpDialog : Dialog
 
 	public Texture2D[] tutos;
 
-	private static int subHeadID;
+	//private static int subHeadID;
 
 	private static int articleID;
 
-	private static int artID;
+	//private static int artID;
 
 	private float articley;
 

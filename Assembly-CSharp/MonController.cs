@@ -12,7 +12,7 @@ public class MonController : MonoBehaviour
 
 	private bool bDie;
 
-	private string dieStr;
+	//private string dieStr;
 
 	public bool bSleep;
 

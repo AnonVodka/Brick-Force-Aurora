@@ -20,24 +20,28 @@ namespace _Emulator
 		private Queue<MsgReference> readQueue = new Queue<MsgReference>();
 		private Queue<MsgReference> writeQueue = new Queue<MsgReference>();
 		private int curSeq = 0;
-		public bool debugHandle = false;
-		public bool debugSend = false;
+		public bool debugHandle = true;
+		public bool debugSend = true;
 		public bool debugPing = false;
 		public bool serverCreated = false;
 		public MatchData matchData;
-		private Channel defaultChannel;
+        private List<Channel> channels = new List<Channel>();
 		private float killLogTimer = 0f;
-		private List<KeyValuePair<int, RegMap>> regMaps = new List<KeyValuePair<int, RegMap>>();
+        private List<KeyValuePair<int, RegMap>> regMaps = new List<KeyValuePair<int, RegMap>>();
 		private bool waitForShutDown = false;
 
 		private void Start()
 		{
 			BuildOption.Instance.Props.UseP2pHolePunching = true;
 			matchData = new MatchData();
-			defaultChannel = new Channel(_id: 1, _mode: 2, _name: "Default", _ip: "", _port: 5000, _userCount: 1, _maxUserCount: 16, _country: 1, _minLvRank: 0, _maxLvRank: 66, _xpBonus: 0, _fpBonus: 0, _limitStarRate: 0);
-		}
 
-		public void SetupServer()
+            channels.Add(new Channel(_id: 1, _mode: 1, _name: "Default", _ip: "", _port: 5000, _userCount: 1, _maxUserCount: 16, _country: -1, _minLvRank: 0, _maxLvRank: 66, _xpBonus: 0, _fpBonus: 0, _limitStarRate: 0));
+            channels.Add(new Channel(_id: 2, _mode: 2, _name: "Battle Channel", _ip: "", _port: 5000, _userCount: 1, _maxUserCount: 16, _country: -1, _minLvRank: 0, _maxLvRank: 66, _xpBonus: 0, _fpBonus: 0, _limitStarRate: 0));
+            channels.Add(new Channel(_id: 3, _mode: 3, _name: "Building Channel", _ip: "", _port: 5000, _userCount: 1, _maxUserCount: 16, _country: -1, _minLvRank: 0, _maxLvRank: 66, _xpBonus: 0, _fpBonus: 0, _limitStarRate: 0));
+            channels.Add(new Channel(_id: 4, _mode: 4, _name: "ClanWar Channel", _ip: "", _port: 5000, _userCount: 1, _maxUserCount: 16, _country: -1, _minLvRank: 0, _maxLvRank: 66, _xpBonus: 0, _fpBonus: 0, _limitStarRate: 0));
+        }
+
+        public void SetupServer()
 		{
 			if (serverSocket == null)
 			{
@@ -47,7 +51,8 @@ namespace _Emulator
 			serverSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 			serverSocket.Listen(16);
 			serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
-			serverCreated = true;
+
+            serverCreated = true;
 			regMaps = RegMapManager.Instance.dicRegMap.ToList();
 			Debug.Log("Server created");
 		}
@@ -56,7 +61,9 @@ namespace _Emulator
         {
 			Socket clientSocket = serverSocket.EndAccept(result);
 			clientSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), clientSocket);
-			HandleClientAccepted(new ClientReference(clientSocket));
+            ClientReference _ref = new ClientReference(clientSocket);
+            Debug.Log("name: " + _ref.GetIdentifier());
+            HandleClientAccepted(_ref);
             serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
         }
 
@@ -223,7 +230,7 @@ namespace _Emulator
 			MsgReference msgRef = readQueue.Peek();
 			switch (msgRef.msg._id)
 			{
-				case 1:
+                case 1:
 					HandleLoginRequest(msgRef);
 					break;
 
@@ -327,7 +334,15 @@ namespace _Emulator
 					HandleResultDoneRequest(msgRef);
 					break;
 
-				case 145:
+                case 140:
+                    HandleChannelListRequest(msgRef);
+                    break;
+
+                case 143: // Switch channels
+                    HandleRoamout(msgRef);
+                    break;
+
+                case 145:
 					HandleRoamin(msgRef);
 					break;
 
@@ -454,12 +469,12 @@ namespace _Emulator
 
 		private void HandleClientAccepted(ClientReference client)
 		{
+            Debug.Log("Accepted client " + client.GetIdentifier());
 			if (!clientList.Exists(x => x.socket == client.socket))
 			{
 				clientList.Add(client);
 				SendConnected(client);
 			}
-
 			else
 				Debug.LogWarning("HandleClientAccepted: Client " + client.socket.RemoteEndPoint.ToString() + " already exists in client list");
 		}
@@ -488,12 +503,15 @@ namespace _Emulator
 			msgRef.client.port = 6000 + msgRef.client.seq;
 			curSeq++;
 
-			SendPlayerInitInfo(msgRef.client);
-			SendChannels(msgRef.client, new Channel[] { defaultChannel });
-			SendCurChannel(msgRef.client, defaultChannel.Id);
+            if (debugHandle)
+                Debug.LogWarning("HandleLoginRequest from: " + msgRef.client.GetIdentifier());
+
+            SendPlayerInitInfo(msgRef.client);
+			SendChannels(msgRef.client, channels.ToArray());
 			SendInventoryRequest(msgRef.client);
-			SendLogin(msgRef.client, defaultChannel.Id);
-		}
+			SendCurChannel(msgRef.client, channels.First().Id);
+			SendLogin(msgRef.client, channels.First().Id);
+        }
 
 		private void HandleLoadComplete(MsgReference msgRef)
 		{
@@ -502,7 +520,7 @@ namespace _Emulator
 			msgRef.client.isLoaded = true;
 
 			if (debugHandle)
-				Debug.Log("HandleLoadComplete from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleLoadComplete from: " + msgRef.client.GetIdentifier());
 		}
 
 		private void HandleTimer(MsgReference msgRef)
@@ -517,7 +535,7 @@ namespace _Emulator
 			}
 
 			if (debugPing)
-				Debug.Log("HandleTimer from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleTimer from: " + msgRef.client.GetIdentifier());
 
 			if (matchData.remainTime <= 0)
 				HandleTeamMatchEnd();
@@ -530,7 +548,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int countdownTime);
 
 			if (debugHandle)
-				Debug.Log("HandleMatchCountdown from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleMatchCountdown from: " + msgRef.client.GetIdentifier());
 
 			if (msgRef.client.seq == matchData.masterSeq)
 			{
@@ -545,7 +563,16 @@ namespace _Emulator
 			}
 		}
 
-		private void HandleRoamin(MsgReference msgRef)
+        private void HandleChannelListRequest(MsgReference msgRef)
+        {
+            SendChannels(msgRef.client, channels.ToArray());
+
+            if (debugHandle)
+                Debug.LogWarning("HandleChannelListRequest from: " + msgRef.client.GetIdentifier());
+
+        }
+
+        private void HandleRoamin(MsgReference msgRef)
 		{
 			msgRef.msg._msg.Read(out int seq);
 			msgRef.msg._msg.Read(out int userType);
@@ -554,7 +581,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out string hashCode);
 
 			if (debugHandle)
-				Debug.Log("HandleRoamin from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRoamin from: " + msgRef.client.GetIdentifier());
 
 			SendPlayerInfo(msgRef.client);
 			SendUserList(msgRef.client);
@@ -564,7 +591,20 @@ namespace _Emulator
 			msgRef.client.clientStatus = ClientReference.ClientStatus.Lobby;
 		}
 
-		private void HandleRequestDownloadedMaps(MsgReference msgRef)
+        private void HandleRoamout(MsgReference msgRef)
+        {
+            msgRef.msg._msg.Read(out int id);
+
+            SendPlayerInitInfo(msgRef.client);
+            SendCurChannel(msgRef.client, id);
+            SendInventoryRequest(msgRef.client);
+            SendLogin(msgRef.client, id);
+
+            if (debugHandle)
+                Debug.LogWarning("HandleRoamout from: " + msgRef.client.GetIdentifier());
+        }
+
+        private void HandleRequestDownloadedMaps(MsgReference msgRef)
 		{
 			msgRef.msg._msg.Read(out int prevPage);
 			msgRef.msg._msg.Read(out int nextPage);
@@ -572,7 +612,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out ushort modeMask);
 
 			if (debugHandle)
-				Debug.Log("HandleRequestDownloadedMaps from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRequestDownloadedMaps from: " + msgRef.client.GetIdentifier());
 
 			SendDownloadedMaps(msgRef.client);
 		}
@@ -580,7 +620,7 @@ namespace _Emulator
 		private void HandleRequestUserList(MsgReference msgRef)
 		{
 			if (debugPing)
-				Debug.Log("HandleRequestUserList from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRequestUserList from: " + msgRef.client.GetIdentifier());
 
 			SendUserList(msgRef.client);
 		}
@@ -592,7 +632,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out bool invite);
 
 			if (debugHandle)
-				Debug.Log("HandleJoin from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleJoin from: " + msgRef.client.GetIdentifier());
 
 			if (roomNumber == matchData.room.No)
 			{
@@ -612,7 +652,7 @@ namespace _Emulator
 		private void HandleBreakIntoRequest(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleBreakInto from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleBreakInto from: " + msgRef.client.GetIdentifier());
 
 			int reply = 0;
 
@@ -644,7 +684,7 @@ namespace _Emulator
 			matchData.RemoveClient(msgRef.client);
 
 			if (debugHandle)
-				Debug.Log("HandleLeave from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleLeave from: " + msgRef.client.GetIdentifier());
 
 			SendLeave(msgRef.client);
 			SendSetStatus(msgRef.client);
@@ -697,7 +737,7 @@ namespace _Emulator
 			matchData.room.map = map;
 			matchData.room.isBreakInto = Convert.ToBoolean(breakinto);
 			matchData.room.isWanted = Convert.ToBoolean(wanted);
-			matchData.room.isDropItem = false;//Convert.ToBoolean(drop);
+			matchData.room.isDropItem = false; //Convert.ToBoolean(drop);
 			matchData.isBalance = Convert.ToBoolean(autobalance);
 			matchData.room.CurMapAlias = alias;
 			matchData.masterSeq = msgRef.client.seq;
@@ -705,7 +745,7 @@ namespace _Emulator
 			matchData.roomCreated = true;
 
 			if (debugHandle)
-				Debug.Log("HandleCreateRoom from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleCreateRoom from: " + msgRef.client.GetIdentifier());
 
 			matchData.AddClient(msgRef.client);
 			SendRendezvousInfo(msgRef.client);
@@ -743,7 +783,7 @@ namespace _Emulator
 			matchData.room.Type = (Room.ROOM_TYPE)type;
 
 			if (debugHandle)
-				Debug.Log("HandleRoomConfig from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRoomConfig from: " + msgRef.client.GetIdentifier());
 
 			SendRoomConfig(null);
 		}
@@ -753,7 +793,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int roomNumber);
 
 			if (debugHandle)
-				Debug.Log("HandleRoomRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRoomRequest from: " + msgRef.client.GetIdentifier());
 
 			if (roomNumber == matchData.room.No)
 				SendRoom(msgRef.client);
@@ -762,7 +802,7 @@ namespace _Emulator
 		private void HandleRoomListRequest(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleRoomListRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRoomListRequest from: " + msgRef.client.GetIdentifier());
 
 			SendRoomList(msgRef.client);
 		}
@@ -777,7 +817,7 @@ namespace _Emulator
 			}
 
 			if (debugHandle)
-				Debug.Log("HandleResumeRoomRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleResumeRoomRequest from: " + msgRef.client.GetIdentifier());
 
 			SendRoom(null, SendType.BroadcastRoom);
 		}
@@ -788,7 +828,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int slotNum);
 
 			if (debugHandle)
-				Debug.Log("HandleTeamChangeRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleTeamChangeRequest from: " + msgRef.client.GetIdentifier());
 
 			if (slotNum < -1 && slotNum > 15)
 				Debug.LogWarning("HandleTeamChangeRequest: Bad slot num " + slotNum + " from client: " + msgRef.client.GetIdentifier());
@@ -810,7 +850,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out sbyte lck);
 
 			if (debugHandle)
-				Debug.Log("HandleSlotLockRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleSlotLockRequest from: " + msgRef.client.GetIdentifier());
 
 			if (slotNum < 0 && slotNum > 15)
 				Debug.LogWarning("HandleSlotLockRequest: Bad slot num " + slotNum + " from client: " + msgRef.client.GetIdentifier());
@@ -832,7 +872,7 @@ namespace _Emulator
 			msgRef.client.status = (BrickManDesc.STATUS)status;
 
 			if (debugHandle)
-				Debug.Log("HandleSetStatusRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleSetStatusRequest from: " + msgRef.client.GetIdentifier());
 
 			SendSetStatus(msgRef.client);
 		}
@@ -844,7 +884,7 @@ namespace _Emulator
 			matchData.lobbyCountdownTime = 0;
 
 			if (debugHandle)
-				Debug.Log("HandleStartRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleStartRequest from: " + msgRef.client.GetIdentifier());
 
 			if (matchData.clientList.Find(x => x.status == BrickManDesc.STATUS.PLAYER_WAITING && x.seq != matchData.masterSeq) != null)
 			{
@@ -875,7 +915,7 @@ namespace _Emulator
 			}
 
 			if (debugHandle)
-				Debug.Log("HandleWeaponHeldRatioRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleWeaponHeldRatioRequest from: " + msgRef.client.GetIdentifier());
 
 			if (msgRef.client.status == BrickManDesc.STATUS.PLAYER_LOADING)
 			{
@@ -899,7 +939,7 @@ namespace _Emulator
 		private void HandleP2PComplete(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleP2PComplete from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleP2PComplete from: " + msgRef.client.GetIdentifier());
 
 			if (msgRef.client.status == BrickManDesc.STATUS.PLAYER_P2PING)
 			{
@@ -950,7 +990,7 @@ namespace _Emulator
 			}
 
 			if (debugHandle)
-				Debug.Log("HandleKillLogRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleKillLogRequest from: " + msgRef.client.GetIdentifier());
 
 			ClientReference victimClient = matchData.clientList.Find(x => x.seq == victim);
 			victimClient.deaths++;
@@ -1005,7 +1045,7 @@ namespace _Emulator
 		private void HandleTeamScoreRequest(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleTeamScoreRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleTeamScoreRequest from: " + msgRef.client.GetIdentifier());
 
 			SendTeamScore();
 		}
@@ -1015,7 +1055,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int brick);
 
 			if (debugHandle)
-				Debug.Log("HandleDestroyBrickRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleDestroyBrickRequest from: " + msgRef.client.GetIdentifier());
 
 			if (!(matchData.destroyedBricks.Exists(x => x == brick)))
 			{
@@ -1029,7 +1069,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int mapId);
 
 			if (debugHandle)
-				Debug.Log("HandleRegMapInfoRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRegMapInfoRequest from: " + msgRef.client.GetIdentifier());
 		}
 
 		private void HandleInventoryCSV(MsgReference msgRef)
@@ -1052,7 +1092,7 @@ namespace _Emulator
 			msgRef.client.inventory = new Inventory(msgRef.client.seq, new CSVLoader(rows));
 
 			if (debugHandle)
-				Debug.Log("HandleInventoryCSV from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleInventoryCSV from: " + msgRef.client.GetIdentifier());
 
 			SendInventory(msgRef.client);
 		}
@@ -1062,7 +1102,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out long itemSeq);
 
 			if (debugHandle)
-				Debug.Log("HandleEquipRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleEquipRequest from: " + msgRef.client.GetIdentifier());
 
 			Item item = msgRef.client.inventory.equipment.Find(x => x.Seq == itemSeq);
 			if (item != null)
@@ -1091,7 +1131,7 @@ namespace _Emulator
 		private void HandleClearShooterTools(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleClearShooterTools from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleClearShooterTools from: " + msgRef.client.GetIdentifier());
 
 			for (int i = 0; i < msgRef.client.inventory.shooterTools.Length; i++)
 			{
@@ -1109,7 +1149,7 @@ namespace _Emulator
 		private void HandleClearWeaponSlots(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleClearWeaponSlots from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleClearWeaponSlots from: " + msgRef.client.GetIdentifier());
 
 			for (int i = 0; i < msgRef.client.inventory.weaponChg.Length; i++)
 			{
@@ -1130,7 +1170,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out long itemSeq);
 
 			if (debugHandle)
-				Debug.Log("HandleSetShooterToolRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleSetShooterToolRequest from: " + msgRef.client.GetIdentifier());
 
 
 			if (itemSeq < 0)
@@ -1138,7 +1178,6 @@ namespace _Emulator
 				msgRef.client.inventory.shooterTools[slot].toolSlot = -1;
 				msgRef.client.inventory.shooterTools[slot] = null;
 			}
-
 			else
 			{
 				Item item = msgRef.client.inventory.equipment.Find(x => x.Seq == itemSeq);
@@ -1161,56 +1200,55 @@ namespace _Emulator
 
 					item.toolSlot = slot;
 					msgRef.client.inventory.shooterTools[slot] = item;
-				}
-			}
+                    SendSetShooterTool(msgRef.client, slot, item.Seq);
+                }
+            }
 
 			msgRef.client.inventory.GenerateActiveTools();
 			SendShooterToolList(msgRef.client);
-			//SendSetShooterTool(msgRef.client, slot, item.Seq);
 		}
 
-		private void HandleSetWeaponSlotRequest(MsgReference msgRef)
-		{
-			msgRef.msg._msg.Read(out int slot);
-			msgRef.msg._msg.Read(out long itemSeq);
+        private void HandleSetWeaponSlotRequest(MsgReference msgRef)
+        {
+            msgRef.msg._msg.Read(out int slot);
+            msgRef.msg._msg.Read(out long itemSeq);
 
-			if (debugHandle)
-				Debug.Log("HandleSetWeaponSlotRequest from: " + msgRef.client.GetIdentifier());
+            if (debugHandle)
+                Debug.LogWarning("HandleSetWeaponSlotRequest from: " + msgRef.client.GetIdentifier() + " for slot " + slot);
 
-			if (itemSeq < 0)
-			{
-				msgRef.client.inventory.weaponChg[slot].toolSlot = -1;
-				msgRef.client.inventory.weaponChg[slot] = null;
-			}
+            if (itemSeq < 0)
+            {
+                msgRef.client.inventory.weaponChg[slot].toolSlot = -1;
+                msgRef.client.inventory.weaponChg[slot] = null;
+            }
+            else
+            {
+                Item item = msgRef.client.inventory.equipment.Find(x => x.Seq == itemSeq);
+                if (item != null)
+                {
+                    if (item.toolSlot >= 0)
+                    {
+                        Item dupeItem = msgRef.client.inventory.weaponChg[item.toolSlot];
+                        if (dupeItem != null)
+                            msgRef.client.inventory.weaponChg[dupeItem.toolSlot] = null;
+                    }
 
-			else
-			{
-				Item item = msgRef.client.inventory.equipment.Find(x => x.Seq == itemSeq);
-				if (item != null)
-				{
-					if (item.toolSlot >= 0)
-					{
-						Item dupeItem = msgRef.client.inventory.weaponChg[item.toolSlot];
-						if (dupeItem != null)
-							msgRef.client.inventory.weaponChg[dupeItem.toolSlot] = null;
-					}
+                    Item oldItem = msgRef.client.inventory.weaponChg[slot];
+                    if (oldItem != null)
+                    {
+                        oldItem.toolSlot = -1;
+                        msgRef.client.inventory.weaponChg[slot] = null;
+                    }
 
-					Item oldItem = msgRef.client.inventory.weaponChg[slot];
-					if (oldItem != null)
-					{
-						oldItem.toolSlot = -1;
-						msgRef.client.inventory.shooterTools[slot] = null;
-					}
+                    item.toolSlot = (sbyte)slot;
+                    msgRef.client.inventory.weaponChg[slot] = item;
+                    SendSetWeaponSlot(msgRef.client, slot, item.Seq);
+                }
+            }
 
-					item.toolSlot = (sbyte)slot;
-					msgRef.client.inventory.shooterTools[slot] = item;
-				}
-			}
-
-			msgRef.client.inventory.GenerateActiveChange();
-			SendWeaponSlotList(msgRef.client);
-			//SendSetWeaponSlot(msgRef.client, slot, item.Seq);
-		}
+            msgRef.client.inventory.GenerateActiveChange();
+            SendWeaponSlotList(msgRef.client);
+        }
 
 		private void HandleRadioMsgRequest(MsgReference msgRef)
 		{
@@ -1219,7 +1257,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int message);
 
 			if (debugHandle)
-				Debug.Log("HandleRadioMsgRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRadioMsgRequest from: " + msgRef.client.GetIdentifier());
 
 			SendRadioMsg(seq, category, message);
 		}
@@ -1229,7 +1267,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out string text);
 
 			if (debugHandle)
-				Debug.Log("HandleChatRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleChatRequest from: " + msgRef.client.GetIdentifier());
 
 			SendChat(msgRef.client, ChatText.CHAT_TYPE.NORMAL, text);
 		}
@@ -1239,7 +1277,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out string text);
 
 			if (debugHandle)
-				Debug.Log("HandleTeamChatRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleTeamChatRequest from: " + msgRef.client.GetIdentifier());
 
 			SendChat(msgRef.client, ChatText.CHAT_TYPE.TEAM, text);
 		}
@@ -1250,7 +1288,7 @@ namespace _Emulator
 			msgRef.client.clientStatus = ClientReference.ClientStatus.Room;
 
 			if (debugHandle)
-				Debug.Log("HandleResultDoneRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleResultDoneRequest from: " + msgRef.client.GetIdentifier());
 
 			SendSetStatus(msgRef.client);
 		}
@@ -1258,7 +1296,7 @@ namespace _Emulator
 		public void HandleRespawnTicketRequest(MsgReference msgRef)
 		{
 			if (debugHandle)
-				Debug.Log("HandleRespawnTicketRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleRespawnTicketRequest from: " + msgRef.client.GetIdentifier());
 
 			SendRespawnTicket(msgRef.client);
 		}
@@ -1279,7 +1317,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out string prev);
 
 			if (debugHandle)
-				Debug.Log("HandleWeaponChangeRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleWeaponChangeRequest from: " + msgRef.client.GetIdentifier());
 
 			SendWeaponChange(msgRef.client, seq);
 			SendPlayerWeaponChange(msgRef.client, prev, next);
@@ -1290,7 +1328,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int seq);
 
 			if (debugHandle)
-				Debug.Log("HandleOpenDoorRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleOpenDoorRequest from: " + msgRef.client.GetIdentifier());
 
 			SendOpenDoor(seq);
 		}
@@ -1300,7 +1338,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int seq);
 
 			if (debugHandle)
-				Debug.Log("HandleCloseDoorRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleCloseDoorRequest from: " + msgRef.client.GetIdentifier());
 		}
 
 		private void HandleDisconnect(MsgReference msgRef)
@@ -1315,7 +1353,7 @@ namespace _Emulator
 				msgRef.msg._msg.Read(out int newMaster);
 
 				if (debugHandle)
-					Debug.Log("HandleDelegateMasterRequest from: " + msgRef.client.GetIdentifier());
+					Debug.LogWarning("HandleDelegateMasterRequest from: " + msgRef.client.GetIdentifier());
 
 				matchData.masterSeq = newMaster;
 				SendMaster(null);
@@ -1327,7 +1365,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int brickSeq);
 
 			if (debugHandle)
-				Debug.Log("HandleGetCannonRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleGetCannonRequest from: " + msgRef.client.GetIdentifier());
 
 			if (!matchData.usedCannons.ContainsKey(brickSeq))
 			{
@@ -1342,7 +1380,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int brickSeq);
 
 			if (debugHandle)
-				Debug.Log("HandleGetCannonRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleGetCannonRequest from: " + msgRef.client.GetIdentifier());
 
 			if (matchData.usedCannons.ContainsKey(brickSeq))
 			{
@@ -1357,7 +1395,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int trainId);
 
 			if (debugHandle)
-				Debug.Log("HandleGetTrainRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleGetTrainRequest from: " + msgRef.client.GetIdentifier());
 
 			if (!matchData.usedTrains.ContainsKey(trainId))
 			{
@@ -1371,7 +1409,7 @@ namespace _Emulator
 			msgRef.msg._msg.Read(out int trainId);
 
 			if (debugHandle)
-				Debug.Log("HandleEmptyTrainRequest from: " + msgRef.client.GetIdentifier());
+				Debug.LogWarning("HandleEmptyTrainRequest from: " + msgRef.client.GetIdentifier());
 
 			if (matchData.usedTrains.ContainsKey(trainId))
 			{
@@ -1504,7 +1542,8 @@ namespace _Emulator
 			if (debugSend)
 				Debug.Log("Broadcasted SendPlayerWeaponChange for player: " + client.GetIdentifier());
 		}
-		public void SendInventory(ClientReference client)
+
+        public void SendInventory(ClientReference client)
 		{
 			SendItemList(client);
 			SendShooterToolList(client);
@@ -1580,17 +1619,21 @@ namespace _Emulator
 
 		public void SendItemPimps(ClientReference client)
 		{
-			List<Item> weapons = client.inventory.equipment.FindAll(x => x.Template.type == TItem.TYPE.WEAPON);
+            List<Item> weapons = client.inventory.equipment.FindAll(x => x.Template.type == TItem.TYPE.WEAPON);
 			for (int i = 0; i < weapons.Count; i++)
 			{
-				SendItemPimp(client, weapons[i], PIMP.PROP_ATK_POW, 10);
+                //Debug.Log("SendItemPimps for " + weapons[i].Template.Name);
+                SendItemPimp(client, weapons[i], PIMP.PROP_ATK_POW, 10);
 				SendItemPimp(client, weapons[i], PIMP.PROP_ACCURACY, 10);
 				SendItemPimp(client, weapons[i], PIMP.PROP_RECOIL, 10);
 				SendItemPimp(client, weapons[i], PIMP.PROP_RPM, weapons[i].Template.upgradeCategory == TItem.UPGRADE_CATEGORY.HAND_GUN ? 10 : 10);
 				SendItemPimp(client, weapons[i], PIMP.PROP_AMMO_MAX, 10);
 				SendItemPimp(client, weapons[i], PIMP.PROP_ATTACK_SPEED, 10);
 			}
-		}
+
+            if (debugSend)
+                Debug.Log("SendItemPimps to: " + client.GetIdentifier());
+        }
 
 		public void SendItemPimp(ClientReference client, Item item, PIMP pimp, int grade)
 		{
@@ -1688,11 +1731,11 @@ namespace _Emulator
 					body.Write(i);
 					body.Write((long)-1);
 				}
-
 				else
 				{
 					body.Write((int)client.inventory.weaponChg[i].toolSlot);
 					body.Write(client.inventory.weaponChg[i].Seq);
+                    Debug.Log("Sending slot " + (int)client.inventory.weaponChg[i].toolSlot);
 				}
 			}
 
@@ -1930,7 +1973,6 @@ namespace _Emulator
 				if (debugSend)
 					Debug.Log("Broadcasted SendRoomConfig for room no: " + matchData.room.No);
 			}
-
 			else
 			{
 				Say(new MsgReference(92, body, client));

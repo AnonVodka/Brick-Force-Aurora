@@ -25,7 +25,7 @@ public class GdgtGun : WeaponGadget
 
 	private bool leftHand;
 
-	private Dictionary<int, MissleInfo> dicMis;
+	//private Dictionary<int, MissleInfo> dicMis;
 
 	private GameObject misObj;
 

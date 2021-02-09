@@ -27,7 +27,10 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <OutputPath>..\..\Brick-Force\BrickForce_Data\Managed\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Accessory.cs" />
@@ -721,6 +724,7 @@
     <Compile Include="ZombieVsHumanManager.cs" />
     <Compile Include="_Emulator\Config.cs" />
     <Compile Include="_Emulator\GUI\InventoryGUI.cs" />
+    <Compile Include="_Emulator\GUI\NewInventoryGUI.cs" />
     <Compile Include="_Emulator\Hooks.cs" />
     <Compile Include="_Emulator\Core.cs" />
     <Compile Include="_Emulator\GUI\MainGUI.cs" />
@@ -742,37 +746,37 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-UnityScript, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\Assembly-UnityScript.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\Assembly-UnityScript.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-UnityScript-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Boo.Lang, Version=2.0.9.5, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\Boo.Lang.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\Mono.Security.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\Mono.Security.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>bin\Debug\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\System.Core.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\System.Core.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityScript.Lang, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Brick-Force\BrickForce_Data\Managed\UnityScript.Lang.dll</HintPath>
+      <HintPath>Z:\Brick Force\BrickForce_Data\Managed\UnityScript.Lang.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />

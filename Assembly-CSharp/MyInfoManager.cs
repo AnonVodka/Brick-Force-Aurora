@@ -2271,7 +2271,6 @@ public class MyInfoManager : MonoBehaviour
 
 	public bool AmIBlasting()
 	{
-		bool flag = false;
 		if (clanMatchRounding % 2 == 0)
 		{
 			return slot < 8;
@@ -2414,7 +2413,6 @@ public class MyInfoManager : MonoBehaviour
 	{
 		if (RoomManager.Instance.CurrentRoomType == Room.ROOM_TYPE.EXPLOSION)
 		{
-			bool flag = false;
 			if ((clanMatchRounding % 2 != 0) ? ((slot >= 8) ? true : false) : ((slot < 8) ? true : false))
 			{
 				SystemMsgManager.Instance.ShowMessage(string.Format(StringMgr.Instance.Get("GUIDE_EXPLOSION_ATTACK01"), custom_inputs.Instance.GetKeyCodeName("K_MODE"), custom_inputs.Instance.GetKeyCodeName("K_ACTION")), 6f);

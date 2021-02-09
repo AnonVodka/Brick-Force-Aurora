@@ -34,7 +34,7 @@ public class HelpWindow : Dialog
 
 	public Vector2 crdHelp4 = new Vector2(497f, 178f);
 
-	private bool bOpenWindow;
+	private bool bOpenWindow = false;
 
 	private Vector2 scrollPosition = Vector2.zero;
 

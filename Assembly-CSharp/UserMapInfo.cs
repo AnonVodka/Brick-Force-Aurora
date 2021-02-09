@@ -180,7 +180,6 @@ public class UserMapInfo
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0114:;
 		}
 		return true;
 	}
@@ -223,7 +222,6 @@ public class UserMapInfo
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0119:;
 		}
 		return true;
 	}

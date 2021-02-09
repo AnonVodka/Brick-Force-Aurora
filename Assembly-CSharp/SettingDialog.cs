@@ -412,6 +412,7 @@ public class SettingDialog : Dialog
 	{
 		selLang = cboxLang.List(crdCBoxLang, selLangContent, listLang);
 		selLangContent = listLang[selLang];
+
 		LabelUtil.TextOut(crdLangLabel, StringMgr.Instance.Get("LANGUAGE_SELECT"), "Label", clrSubTitle, GlobalVars.txtEmptyColor, TextAnchor.UpperLeft);
 		if (GlobalVars.Instance.MyButton(crdApplyLang, StringMgr.Instance.Get("APPLY2"), "BtnAction") && 0 <= selLang && selLang < BuildOption.Instance.Props.supportLanguages.Length)
 		{

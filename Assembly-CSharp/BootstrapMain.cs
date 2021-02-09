@@ -19,7 +19,9 @@ public class BootstrapMain : MonoBehaviour
 	private void Awake()
 	{
 		InjectionDetector.StartDetection(OnInjectionDetected);
+#pragma warning disable CS0618 // Type or member is obsolete
 		Input.eatKeyPressOnTextFieldFocus = false;
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	private void OnInjectionDetected()

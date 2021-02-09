@@ -1215,6 +1215,7 @@ public class TooltipProperty
 		return 2;
 	}
 
+    // GUNSTATS: is being called
 	private void DoGunProperty(TWeapon tWeapon, Gun gun, Scope scope, Aim aim)
 	{
 		Weapon component = tWeapon.CurPrefab().GetComponent<Weapon>();
@@ -1236,8 +1237,8 @@ public class TooltipProperty
 			}
 			else
 			{
-				WpnMod wpnMod = WeaponModifier.Instance.Get((int)gun.weaponBy);
-				float num2 = (wpnMod?.fAtkPow ?? gun.AtkPow) / maxAtkPow;
+                WpnMod wpnMod = WeaponModifier.Instance.Get((int)gun.weaponBy);
+                float num2 = (wpnMod?.fAtkPow ?? gun.AtkPow) / maxAtkPow;
 				float num3 = (wpnMod?.fRateOfFire ?? gun.rateOfFire) / maxRpm;
 				float num4 = (wpnMod?.fRecoilPitch ?? gun.recoilPitch) / maxRecoilPitch;
 				float num5 = (wpnMod?.fSpeedFactor ?? gun.speedFactor) / maxMobility;
@@ -1258,37 +1259,22 @@ public class TooltipProperty
 				float num11 = num5 * 100f;
 				float num12 = num6 * 100f;
 				float num13 = (float)(wpnMod?.maxAmmo ?? gun.maxAmmo);
-				float num14 = (!(null == scope)) ? scope.accuracy.accuracy : aim.accuracy.accuracy;
+
+                float num14 = (!(null == scope)) ? scope.accuracy.accuracy : aim.accuracy.accuracy;
 				if (wpnMod != null)
 				{
 					num14 = ((!(null == scope)) ? wpnMod.fZAccuracy : wpnMod.fAccuracy);
 				}
 				float num15 = wpnMod?.fRange ?? component.range;
 				float num16 = wpnMod?.effectiveRange ?? component.effectiveRange;
-				if (num2 > 1f)
-				{
-					num2 = 1f;
-				}
-				if (num3 > 1f)
-				{
-					num3 = 1f;
-				}
-				if (num4 > 1f)
-				{
-					num4 = 1f;
-				}
-				if (num5 > 1f)
-				{
-					num5 = 1f;
-				}
-				if (num6 > 1f)
-				{
-					num6 = 1f;
-				}
-				if (num7 > 1f)
-				{
-					num7 = 1f;
-				}
+
+				if (num2 > 1f) num2 = 1f;
+				if (num3 > 1f) num3 = 1f;
+				if (num4 > 1f) num4 = 1f;
+				if (num5 > 1f) num5 = 1f;
+				if (num6 > 1f) num6 = 1f;
+				if (num7 > 1f) num7 = 1f;
+
 				titley = curUIPos.y + 10f;
 				LabelUtil.TextOut(new Vector2(titlex, titley), StringMgr.Instance.Get("ATTACK_POWER"), "MiniLabel", new Color(0.83f, 0.49f, 0.29f), GlobalVars.txtEmptyColor, TextAnchor.MiddleRight);
 				LabelUtil.TextOut(new Vector2(titlex, titley + 20f), StringMgr.Instance.Get("ACCURACY"), "MiniLabel", new Color(0.83f, 0.49f, 0.29f), GlobalVars.txtEmptyColor, TextAnchor.MiddleRight);
@@ -1328,7 +1314,10 @@ public class TooltipProperty
 				string str3 = string.Empty;
 				string str4 = string.Empty;
 				string str5 = string.Empty;
-				if (!isShop)
+
+                /*
+                // This code causes some weapons to not work
+                if (!isShop)
 				{
 					string str6 = StringMgr.Instance.Get("UP");
 					int num22 = 0;
@@ -1427,7 +1416,8 @@ public class TooltipProperty
 						TextureUtil.DrawTexture(new Rect(gaugex + num31, gaugey + 40f, 100f * num30, 12f), GlobalVars.Instance.gaugeTiers[num22], ScaleMode.StretchToFill);
 					}
 				}
-				color = GUI.color;
+                */
+                color = GUI.color;
 				GUI.color = Color.yellow;
 				TextureUtil.DrawTexture(new Rect(gaugex, gaugey, 100f * num2, 12f), gauge, ScaleMode.StretchToFill);
 				TextureUtil.DrawTexture(new Rect(gaugex, gaugey + 20f, 100f * num7, 12f), gauge, ScaleMode.StretchToFill);

@@ -38,7 +38,7 @@ public class PlayerList4IndividualFrame
 
 	private Vector2 crdClanName = new Vector2(173f, 53f);
 
-	private Color txtMainColor;
+	//private Color txtMainColor;
 
 	private BrickManDesc myDesc;
 

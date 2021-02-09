@@ -19,11 +19,11 @@ public class TItemManager : MonoBehaviour
 
 	private bool isLoaded;
 
-	private bool isIconLoaded;
+	private bool isIconLoaded = false;
 
-	private bool isWeaponByLoaded;
+	private bool isWeaponByLoaded = false;
 
-	private bool isMaterialLoaded;
+	private bool isMaterialLoaded = false;
 
 	public int icnVersion = 1;
 
@@ -76,108 +76,6 @@ public class TItemManager : MonoBehaviour
 				}
 			}
 			return instance;
-		}
-	}
-
-	public void getIconBundle(string fileName)
-	{
-		StartCoroutine(downloadICONS(fileName));
-	}
-
-	public void getWeaponByBundle(string fileName)
-	{
-		StartCoroutine(downloadWEAPONBY(fileName));
-	}
-
-	public void getMaterialBundle(string fileName)
-	{
-		StartCoroutine(downloadMATERIALS(fileName));
-	}
-
-	private IEnumerator downloadICONS(string fileName)
-	{
-		while (!Caching.ready)
-		{
-			yield return (object)null;
-		}
-		string url = "http://" + BuildOption.Instance.Props.GetResourceServer + "/BfData/" + fileName;
-		using (WWW www = WWW.LoadFromCacheOrDownload(url, icnVersion))
-		{
-			yield return (object)www;
-			AssetBundle bundle = www.assetBundle;
-			UnityEngine.Object[] objs = bundle.LoadAll();
-			icons = new Texture2D[objs.Length];
-			for (int i = 0; i < objs.Length; i++)
-			{
-				Texture2D tex = objs[i] as Texture2D;
-				if (tex != null)
-				{
-					icons[i] = tex;
-				}
-				else
-				{
-					Debug.LogError("local bundle load error: " + objs[i].name);
-				}
-			}
-			isIconLoaded = true;
-		}
-	}
-
-	private IEnumerator downloadWEAPONBY(string fileName)
-	{
-		while (!Caching.ready)
-		{
-			yield return (object)null;
-		}
-		string url = "http://" + BuildOption.Instance.Props.GetResourceServer + "/BfData/" + fileName;
-		using (WWW www = WWW.LoadFromCacheOrDownload(url, wpnbyVersion))
-		{
-			yield return (object)www;
-			AssetBundle bundle = www.assetBundle;
-			UnityEngine.Object[] objs = bundle.LoadAll();
-			weaponBy = new Texture2D[objs.Length];
-			for (int i = 0; i < objs.Length; i++)
-			{
-				Texture2D tex = objs[i] as Texture2D;
-				if (tex != null)
-				{
-					weaponBy[i] = tex;
-				}
-				else
-				{
-					Debug.LogError("local bundle load error: " + objs[i].name);
-				}
-			}
-			isWeaponByLoaded = true;
-		}
-	}
-
-	private IEnumerator downloadMATERIALS(string fileName)
-	{
-		while (!Caching.ready)
-		{
-			yield return (object)null;
-		}
-		string url = "http://" + BuildOption.Instance.Props.GetResourceServer + "/BfData/" + fileName;
-		using (WWW www = WWW.LoadFromCacheOrDownload(url, mtlVersion))
-		{
-			yield return (object)www;
-			AssetBundle bundle = www.assetBundle;
-			UnityEngine.Object[] objs = bundle.LoadAll(typeof(Material));
-			materials = new Material[objs.Length];
-			for (int i = 0; i < objs.Length; i++)
-			{
-				Material mat = objs[i] as Material;
-				if (mat != null)
-				{
-					materials[i] = mat;
-				}
-				else
-				{
-					Debug.LogError("local bundle load error: " + objs[i].name);
-				}
-			}
-			isMaterialLoaded = true;
 		}
 	}
 
@@ -275,165 +173,19 @@ public class TItemManager : MonoBehaviour
 
 	public void LoadAll()
 	{
-		Property props = BuildOption.Instance.Props;
-		if (props.isWebPlayer)
-		{
-			StartCoroutine(LoadAllFromWWW());
-		}
-		else
-		{
-			isLoaded = (LoadCostumeFromLocalFileSystem() && LoadWeaponFromLocalFileSystem() && LoadAccessoryFromLocalFileSystem() && LoadCharacterFromLocalFileSystem() && LoadSpecialFromLocalFileSystem() && LoadUpgradeFromLocalFileSystem() && LoadBundleFromLocalFileSystem());
-		}
+        isLoaded = (
+            LoadCostumeFromLocalFileSystem() 
+            && LoadWeaponFromLocalFileSystem() 
+            && LoadAccessoryFromLocalFileSystem() 
+            && LoadCharacterFromLocalFileSystem() 
+            && LoadSpecialFromLocalFileSystem() 
+            && LoadUpgradeFromLocalFileSystem() 
+            && LoadBundleFromLocalFileSystem()
+            );
 	}
 
 	public void ExportItems()
 	{
-	}
-
-	private IEnumerator LoadAllFromWWW()
-	{
-		bool characterLoaded = false;
-		bool accessoryLoaded = false;
-		bool costumeLoaded = false;
-		bool weaponLoaded = false;
-		bool specialLoaded = false;
-		bool upgradeLoaded = false;
-		bool bundleLoaded = false;
-		Property prop = BuildOption.Instance.Props;
-		string url7 = "http://" + prop.GetResourceServer + "/BfData/Template/character.txt.cooked";
-		WWW wwwCharacter = new WWW(url7);
-		yield return (object)wwwCharacter;
-		using (MemoryStream input = new MemoryStream(wwwCharacter.bytes))
-		{
-			using (BinaryReader reader2 = new BinaryReader(input))
-			{
-				CSVLoader csvLoader7 = new CSVLoader();
-				if (csvLoader7.SecuredLoadFromBinaryReader(reader2))
-				{
-					ParseCharacter(csvLoader7);
-					characterLoaded = true;
-				}
-			}
-		}
-		if (!characterLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/costume.txt.cooked";
-		WWW wwwCostume = new WWW(url7);
-		yield return (object)wwwCostume;
-		using (MemoryStream input2 = new MemoryStream(wwwCostume.bytes))
-		{
-			using (BinaryReader reader3 = new BinaryReader(input2))
-			{
-				CSVLoader csvLoader6 = new CSVLoader();
-				if (csvLoader6.SecuredLoadFromBinaryReader(reader3))
-				{
-					ParseCostume(csvLoader6);
-					costumeLoaded = true;
-				}
-			}
-		}
-		if (!costumeLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/accessory.txt.cooked";
-		WWW wwwAccessory = new WWW(url7);
-		yield return (object)wwwAccessory;
-		using (MemoryStream input3 = new MemoryStream(wwwAccessory.bytes))
-		{
-			using (BinaryReader reader4 = new BinaryReader(input3))
-			{
-				CSVLoader csvLoader5 = new CSVLoader();
-				if (csvLoader5.SecuredLoadFromBinaryReader(reader4))
-				{
-					ParseAccessory(csvLoader5);
-					accessoryLoaded = true;
-				}
-			}
-		}
-		if (!accessoryLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/weapon.txt.cooked";
-		WWW wwwWeapon = new WWW(url7);
-		yield return (object)wwwWeapon;
-		using (MemoryStream input4 = new MemoryStream(wwwWeapon.bytes))
-		{
-			using (BinaryReader reader5 = new BinaryReader(input4))
-			{
-				CSVLoader csvLoader4 = new CSVLoader();
-				if (csvLoader4.SecuredLoadFromBinaryReader(reader5))
-				{
-					ParseWeapon(csvLoader4);
-					weaponLoaded = true;
-				}
-			}
-		}
-		if (!weaponLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/special.txt.cooked";
-		WWW wwwSpecial = new WWW(url7);
-		yield return (object)wwwSpecial;
-		using (MemoryStream input5 = new MemoryStream(wwwSpecial.bytes))
-		{
-			using (BinaryReader reader6 = new BinaryReader(input5))
-			{
-				CSVLoader csvLoader3 = new CSVLoader();
-				if (csvLoader3.SecuredLoadFromBinaryReader(reader6))
-				{
-					ParseSpecial(csvLoader3);
-					specialLoaded = true;
-				}
-			}
-		}
-		if (!specialLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/upgrade.txt.cooked";
-		WWW wwwUpgrade = new WWW(url7);
-		yield return (object)wwwUpgrade;
-		using (MemoryStream input6 = new MemoryStream(wwwUpgrade.bytes))
-		{
-			using (BinaryReader reader7 = new BinaryReader(input6))
-			{
-				CSVLoader csvLoader2 = new CSVLoader();
-				if (csvLoader2.SecuredLoadFromBinaryReader(reader7))
-				{
-					ParseUpgrade(csvLoader2);
-					upgradeLoaded = true;
-				}
-			}
-		}
-		if (!upgradeLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		url7 = "http://" + prop.GetResourceServer + "/BfData/Template/bundle.txt.cooked";
-		WWW wwwBundle = new WWW(url7);
-		yield return (object)wwwBundle;
-		using (MemoryStream stream = new MemoryStream(wwwBundle.bytes))
-		{
-			using (BinaryReader reader = new BinaryReader(stream))
-			{
-				CSVLoader csvLoader = new CSVLoader();
-				if (csvLoader.SecuredLoadFromBinaryReader(reader))
-				{
-					ParseBundle(csvLoader);
-					bundleLoaded = true;
-				}
-			}
-		}
-		if (!bundleLoaded)
-		{
-			Debug.LogError("Fail to download " + url7);
-		}
-		isLoaded = (costumeLoaded && characterLoaded && weaponLoaded && accessoryLoaded && specialLoaded && upgradeLoaded && bundleLoaded);
 	}
 
 	private void ParseBundle(CSVLoader csvLoader)
@@ -831,7 +583,9 @@ public class TItemManager : MonoBehaviour
 			if (tWeapon.CurPrefab() != null)
 			{
 				WeaponFunction component = tWeapon.CurPrefab().GetComponent<WeaponFunction>();
-				if (null == component)
+                Gun gun = tWeapon.CurPrefab().GetComponent<Gun>();
+
+                if (null == component)
 				{
 					Debug.LogError(Value + " weapon does not have WeaponFunction");
 				}

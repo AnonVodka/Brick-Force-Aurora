@@ -57,5 +57,14 @@ namespace _Emulator
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern void OutputDebugString(string lpOutputString);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleTitle(string lpConsoleTitle);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteConsole(IntPtr hConsoleOutput, string buffer, ulong nNumberOfCharsToWrite, UIntPtr lpNumberOfCharsWritten, UIntPtr lpReserved);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleTextAttribute(IntPtr hConsoleOutput, uint wAttributes);
     }
 }

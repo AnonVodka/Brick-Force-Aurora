@@ -355,7 +355,6 @@ namespace CodeStage.AntiCheat.ObscuredTypes
 			{
 				SavesTampered();
 				return string.Empty;
-				IL_004c:;
 			}
 			string @string = Encoding.UTF8.GetString(array2, 0, array2.Length);
 			string result = ObscuredString.EncryptDecrypt(@string, encryptionKey);

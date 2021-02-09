@@ -201,10 +201,12 @@ public class ComboBox
 		{
 			float num = guiStyle.fixedHeight * (float)listContent.Length;
 			Rect position2 = new Rect(rect.x, rect.y + rect.height + 2f, rect.width, num);
+
 			if (!scrollDown)
 			{
 				position2 = new Rect(rect.x, rect.y - num - 2f, rect.width, num);
 			}
+
 			if (scrollDown)
 			{
 				scrollViewVector = GUI.BeginScrollView(new Rect(rect.x, rect.y + rect.height, rect.width, num + 2f), scrollViewVector, new Rect(rect.x, rect.y + rect.height, rect.width, num), alwaysShowHorizontal: false, alwaysShowVertical: false);
@@ -213,6 +215,7 @@ public class ComboBox
 			{
 				scrollViewVector = GUI.BeginScrollView(new Rect(rect.x, rect.y - num, rect.width, num + 2f), scrollViewVector, new Rect(rect.x, rect.y - num, rect.width, num), alwaysShowHorizontal: false, alwaysShowVertical: false);
 			}
+
 			if (scrollDown)
 			{
 				GUI.Box(new Rect(rect.x, rect.y, rect.width, num + rect.height + 2f), string.Empty, boxStyle);
@@ -221,6 +224,7 @@ public class ComboBox
 			{
 				GUI.Box(new Rect(rect.x, rect.y - num, rect.width, num + rect.height + 2f), string.Empty, boxStyle);
 			}
+
 			int num2 = GUI.SelectionGrid(position2, selectedItemIndex, listContent, 1, guiStyle);
 			if (num2 != selectedItemIndex)
 			{
@@ -228,7 +232,9 @@ public class ComboBox
 				flag = true;
 				bOpenList = false;
 			}
+
 			GUI.EndScrollView();
+
 			if (Input.GetMouseButtonDown(0))
 			{
 				Vector2 point = MouseUtil.ScreenToPixelPoint(Input.mousePosition);

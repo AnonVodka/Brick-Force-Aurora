@@ -43,45 +43,45 @@ public class WeaponModifier : MonoBehaviour
 		if (dic.ContainsKey(nSeq))
 		{
 			dic[nSeq].nSeq = nSeq;
-			dic[nSeq].fReloadSpeed = ((!(fReloadSpeed < 0f)) ? fReloadSpeed : float.PositiveInfinity);
-			dic[nSeq].fDrawSpeed = ((!(fDrawSpeed < 0f)) ? fDrawSpeed : float.PositiveInfinity);
-			dic[nSeq].fRange = ((!(fRange < 0f)) ? fRange : float.PositiveInfinity);
-			dic[nSeq].fSpeedFactor = ((!(fSpeedFactor < 0f)) ? fSpeedFactor : float.PositiveInfinity);
-			dic[nSeq].fAtkPow = ((!(fAtkPow < 0f)) ? fAtkPow : float.PositiveInfinity);
-			dic[nSeq].fRigidity = ((!(fRigidity < 0f)) ? fRigidity : float.PositiveInfinity);
-			dic[nSeq].fRateOfFire = ((!(fRateOfFire < 0f)) ? fRateOfFire : float.PositiveInfinity);
-			dic[nSeq].fRecoilPitch = ((!(fRecoilPitch < 0f)) ? fRecoilPitch : float.PositiveInfinity);
-			dic[nSeq].fThrowForce = ((!(fThrowForce < 0f)) ? fThrowForce : float.PositiveInfinity);
-			dic[nSeq].fAccuracy = ((!(fAccuracy < 0f)) ? fAccuracy : float.PositiveInfinity);
-			dic[nSeq].fAccurateMin = ((!(fAccurateMin < 0f)) ? fAccurateMin : float.PositiveInfinity);
-			dic[nSeq].fAccurateMax = ((!(fAccurateMax < 0f)) ? fAccurateMax : float.PositiveInfinity);
-			dic[nSeq].fInaccurateMin = ((!(fInaccurateMin < 0f)) ? fInaccurateMin : float.PositiveInfinity);
-			dic[nSeq].fInaccurateMax = ((!(fInaccurateMax < 0f)) ? fInaccurateMax : float.PositiveInfinity);
-			dic[nSeq].fAccurateSpread = ((!(fAccurateSpread < 0f)) ? fAccurateSpread : float.PositiveInfinity);
-			dic[nSeq].fAccurateCenter = ((!(fAccurateCenter < 0f)) ? fAccurateCenter : float.PositiveInfinity);
-			dic[nSeq].fInaccurateSpread = ((!(fInaccurateSpread < 0f)) ? fInaccurateSpread : float.PositiveInfinity);
-			dic[nSeq].fInaccurateCenter = ((!(fInaccurateCenter < 0f)) ? fInaccurateCenter : float.PositiveInfinity);
-			dic[nSeq].fMoveInaccuracyFactor = ((!(fMoveInaccuracyFactor < 0f)) ? fMoveInaccuracyFactor : float.PositiveInfinity);
-			dic[nSeq].fZAccuracy = ((!(fZAccuracy < 0f)) ? fZAccuracy : float.PositiveInfinity);
-			dic[nSeq].fZAccurateMin = ((!(fZAccurateMin < 0f)) ? fZAccurateMin : float.PositiveInfinity);
-			dic[nSeq].fZAccurateMax = ((!(fZAccurateMax < 0f)) ? fZAccurateMax : float.PositiveInfinity);
-			dic[nSeq].fZInaccurateMin = ((!(fZInaccurateMin < 0f)) ? fZInaccurateMin : float.PositiveInfinity);
-			dic[nSeq].fZInaccurateMax = ((!(fZInaccurateMax < 0f)) ? fZInaccurateMax : float.PositiveInfinity);
-			dic[nSeq].fZAccurateSpread = ((!(fZAccurateSpread < 0f)) ? fZAccurateSpread : float.PositiveInfinity);
-			dic[nSeq].fZAccurateCenter = ((!(fZAccurateCenter < 0f)) ? fZAccurateCenter : float.PositiveInfinity);
-			dic[nSeq].fZInaccurateSpread = ((!(fZInaccurateSpread < 0f)) ? fZInaccurateSpread : float.PositiveInfinity);
-			dic[nSeq].fZInaccurateCenter = ((!(fZInaccurateCenter < 0f)) ? fZInaccurateCenter : float.PositiveInfinity);
-			dic[nSeq].fZMoveInaccuracyFactor = ((!(fZMoveInaccuracyFactor < 0f)) ? fZMoveInaccuracyFactor : float.PositiveInfinity);
-			dic[nSeq].fZFov = ((!(fZFov < 0f)) ? fZFov : float.PositiveInfinity);
-			dic[nSeq].fZCamSpeed = ((!(fZCamSpeed < 0f)) ? fZCamSpeed : float.PositiveInfinity);
-			dic[nSeq].fSlashSpeed = ((!(fSlashSpeed < 0f)) ? fSlashSpeed : float.PositiveInfinity);
-			dic[nSeq].maxAmmo = ((maxAmmo >= 0) ? maxAmmo : 0);
-			dic[nSeq].maxMagazine = ((maxMagazine >= 0) ? maxMagazine : 0);
-			dic[nSeq].explosionTime = ((!(fExplosionTime < 0f)) ? fExplosionTime : float.PositiveInfinity);
-			dic[nSeq].effectiveRange = ((!(fEffectiveRange < 0f)) ? Mathf.Min(fEffectiveRange, fRange) : float.PositiveInfinity);
+			dic[nSeq].fReloadSpeed = ((!(fReloadSpeed < 0f)) ? fReloadSpeed : 75f);
+			dic[nSeq].fDrawSpeed = ((!(fDrawSpeed < 0f)) ? fDrawSpeed : 75f);
+			dic[nSeq].fRange = ((!(fRange < 0f)) ? fRange : 75f);
+			dic[nSeq].fSpeedFactor = ((!(fSpeedFactor < 0f)) ? fSpeedFactor : 75f);
+			dic[nSeq].fAtkPow = ((!(fAtkPow < 0f)) ? fAtkPow : 75f);
+			dic[nSeq].fRigidity = ((!(fRigidity < 0f)) ? fRigidity : 75f);
+			dic[nSeq].fRateOfFire = ((!(fRateOfFire < 0f)) ? fRateOfFire : 75f);
+			dic[nSeq].fRecoilPitch = ((!(fRecoilPitch < 0f)) ? fRecoilPitch : 75f);
+			dic[nSeq].fThrowForce = ((!(fThrowForce < 0f)) ? fThrowForce : 75f);
+			dic[nSeq].fAccuracy = ((!(fAccuracy < 0f)) ? fAccuracy : 75f);
+			dic[nSeq].fAccurateMin = ((!(fAccurateMin < 0f)) ? fAccurateMin : 75f);
+			dic[nSeq].fAccurateMax = ((!(fAccurateMax < 0f)) ? fAccurateMax : 75f);
+			dic[nSeq].fInaccurateMin = ((!(fInaccurateMin < 0f)) ? fInaccurateMin : 75f);
+			dic[nSeq].fInaccurateMax = ((!(fInaccurateMax < 0f)) ? fInaccurateMax : 75f);
+			dic[nSeq].fAccurateSpread = ((!(fAccurateSpread < 0f)) ? fAccurateSpread : 75f);
+			dic[nSeq].fAccurateCenter = ((!(fAccurateCenter < 0f)) ? fAccurateCenter : 75f);
+			dic[nSeq].fInaccurateSpread = ((!(fInaccurateSpread < 0f)) ? fInaccurateSpread : 75f);
+			dic[nSeq].fInaccurateCenter = ((!(fInaccurateCenter < 0f)) ? fInaccurateCenter : 75f);
+			dic[nSeq].fMoveInaccuracyFactor = ((!(fMoveInaccuracyFactor < 0f)) ? fMoveInaccuracyFactor : 75f);
+			dic[nSeq].fZAccuracy = ((!(fZAccuracy < 0f)) ? fZAccuracy : 75f);
+			dic[nSeq].fZAccurateMin = ((!(fZAccurateMin < 0f)) ? fZAccurateMin : 75f);
+			dic[nSeq].fZAccurateMax = ((!(fZAccurateMax < 0f)) ? fZAccurateMax : 75f);
+			dic[nSeq].fZInaccurateMin = ((!(fZInaccurateMin < 0f)) ? fZInaccurateMin : 75f);
+			dic[nSeq].fZInaccurateMax = ((!(fZInaccurateMax < 0f)) ? fZInaccurateMax : 75f);
+			dic[nSeq].fZAccurateSpread = ((!(fZAccurateSpread < 0f)) ? fZAccurateSpread : 75f);
+			dic[nSeq].fZAccurateCenter = ((!(fZAccurateCenter < 0f)) ? fZAccurateCenter : 75f);
+			dic[nSeq].fZInaccurateSpread = ((!(fZInaccurateSpread < 0f)) ? fZInaccurateSpread : 75f);
+			dic[nSeq].fZInaccurateCenter = ((!(fZInaccurateCenter < 0f)) ? fZInaccurateCenter : 75f);
+			dic[nSeq].fZMoveInaccuracyFactor = ((!(fZMoveInaccuracyFactor < 0f)) ? fZMoveInaccuracyFactor : 75f);
+			dic[nSeq].fZFov = ((!(fZFov < 0f)) ? fZFov : 75f);
+			dic[nSeq].fZCamSpeed = ((!(fZCamSpeed < 0f)) ? fZCamSpeed : 75f);
+			dic[nSeq].fSlashSpeed = ((!(fSlashSpeed < 0f)) ? fSlashSpeed : 75f);
+			dic[nSeq].maxAmmo = ((maxAmmo >= 0) ? maxAmmo : 10);
+			dic[nSeq].maxMagazine = ((maxMagazine >= 0) ? maxMagazine : 10);
+			dic[nSeq].explosionTime = ((!(fExplosionTime < 0f)) ? fExplosionTime : 75f);
+			dic[nSeq].effectiveRange = ((!(fEffectiveRange < 0f)) ? Mathf.Min(fEffectiveRange, fRange) : 75f);
 			dic[nSeq].recoilYaw = fRecoilYaw;
 			dic[nSeq].brokenRatio = brokenRatio;
-			dic[nSeq].radius = ((!(radius < 0f)) ? radius : float.PositiveInfinity);
+			dic[nSeq].radius = ((!(radius < 0f)) ? radius : 75f);
 		}
 	}
 
@@ -103,19 +103,19 @@ public class WeaponModifier : MonoBehaviour
 		if (dicEx.ContainsKey(nSeq))
 		{
 			dicEx[nSeq].nSeq = nSeq;
-			dicEx[nSeq].misSpeed = ((!(misSpeed < 0f)) ? misSpeed : float.PositiveInfinity);
-			dicEx[nSeq].throwForce = ((!(throwForce < 0f)) ? throwForce : float.PositiveInfinity);
+			dicEx[nSeq].misSpeed = ((!(misSpeed < 0f)) ? misSpeed : 75f);
+			dicEx[nSeq].throwForce = ((!(throwForce < 0f)) ? throwForce : 75f);
 			dicEx[nSeq].maxLauncherAmmo = ((maxLauncherAmmo >= 0) ? maxLauncherAmmo : 0);
-			dicEx[nSeq].radius2ndWpn = ((!(radius2ndWpn < 0f)) ? radius2ndWpn : float.PositiveInfinity);
+			dicEx[nSeq].radius2ndWpn = ((!(radius2ndWpn < 0f)) ? radius2ndWpn : 75f);
 			dicEx[nSeq].damage2ndWpn = ((damage2ndWpn >= 0) ? damage2ndWpn : 0);
-			dicEx[nSeq].recoilPitch2ndWpn = ((!(recoilPitch2ndWpn < 0f)) ? recoilPitch2ndWpn : float.PositiveInfinity);
+			dicEx[nSeq].recoilPitch2ndWpn = ((!(recoilPitch2ndWpn < 0f)) ? recoilPitch2ndWpn : 75f);
 			dicEx[nSeq].recoilYaw2ndWpn = recoilYaw2ndWpn;
-			dicEx[nSeq].Radius1stWpn = ((!(Radius1stWpn < 0f)) ? Radius1stWpn : float.PositiveInfinity);
+			dicEx[nSeq].Radius1stWpn = ((!(Radius1stWpn < 0f)) ? Radius1stWpn : 75f);
 			dicEx[nSeq].semiAutoMaxCyclicAmmo = ((semiAutoMaxCyclicAmmo >= 0) ? semiAutoMaxCyclicAmmo : 0);
 			dicEx[nSeq].minBuckShot = ((minBuckShot >= 0) ? minBuckShot : 0);
 			dicEx[nSeq].maxBuckShot = ((maxBuckShot >= 0) ? maxBuckShot : 0);
-			dicEx[nSeq].persistTime = ((!(persistTime < 0f)) ? persistTime : float.PositiveInfinity);
-			dicEx[nSeq].continueTime = ((!(continueTime < 0f)) ? continueTime : float.PositiveInfinity);
+			dicEx[nSeq].persistTime = ((!(persistTime < 0f)) ? persistTime : 75f);
+			dicEx[nSeq].continueTime = ((!(continueTime < 0f)) ? continueTime : 75f);
 		}
 	}
 

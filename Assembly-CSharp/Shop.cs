@@ -45,7 +45,7 @@ public class Shop
 
 	private string[] weaponTabs;
 
-	private string[] specialweaponTabs;
+	//private string[] specialweaponTabs;
 
 	private string[] clothTabs;
 
@@ -147,7 +147,7 @@ public class Shop
 
 	private int mainweaponTab = 4;
 
-	private int defaultClicked;
+	private int defaultClicked = 0;
 
 	private bool activeRelateItem;
 

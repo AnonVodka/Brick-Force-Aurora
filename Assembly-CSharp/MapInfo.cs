@@ -20,9 +20,9 @@ public class MapInfo
 
 	public string[] cboxMapSearchNamesReal;
 
-	private string selectedMainName;
+	//private string selectedMainName;
 
-	private string selectedMyMapName;
+	//private string selectedMyMapName;
 
 	private string selectedSubName;
 

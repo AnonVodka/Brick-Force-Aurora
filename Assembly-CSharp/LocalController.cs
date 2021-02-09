@@ -205,7 +205,7 @@ public class LocalController : MonoBehaviour
 
 	private RadioMenu radioMenu;
 
-	private bool onceHideFps;
+	//private bool onceHideFps = false;
 
 	public SystemMessage systemMsg;
 
@@ -361,9 +361,9 @@ public class LocalController : MonoBehaviour
 
 	private float uninstallDelta;
 
-	private bool openning;
+	private bool openning = false;
 
-	private float openningDelta;
+	private float openningDelta = 0;
 
 	public float openningTime = 4f;
 
@@ -1048,7 +1048,7 @@ public class LocalController : MonoBehaviour
 		ObscuredFloat.onCheatingDetected = OnCheatingDetecting;
 		dicDoor = new Dictionary<int, CDoor>();
 		deltaKeyJump = float.PositiveInfinity;
-		onceHideFps = false;
+		//onceHideFps = false;
 		armor = (maxArmor = NoCheat.Instance.HideVal(NoCheat.WATCH_DOG.ARMOR, MyInfoManager.Instance.SumArmor()));
 		NoCheat.Instance.Sync(NoCheat.WATCH_DOG.ARMOR, armor);
 		autoHealCount = 0;
@@ -2030,7 +2030,7 @@ public class LocalController : MonoBehaviour
 		CancelSpeedUp();
 		controlContext = CONTROL_CONTEXT.TRAIN_TRY;
 		cannonTryingTime = 0f;
-		onceHideFps = true;
+		//onceHideFps = true;
 	}
 
 	private void EnterCannon(CannonController cannonController)
@@ -2043,7 +2043,7 @@ public class LocalController : MonoBehaviour
 		controlContext = CONTROL_CONTEXT.CANNON_TRY;
 		cannonTryingTime = 0f;
 		BroadcastMessage("OnEnterCannon", cannon);
-		onceHideFps = true;
+		//onceHideFps = true;
 		TutoInput component = GameObject.Find("Main").GetComponent<TutoInput>();
 		if (component != null)
 		{
@@ -2061,7 +2061,7 @@ public class LocalController : MonoBehaviour
 
 	public void LeaveTrain()
 	{
-		onceHideFps = false;
+		//onceHideFps = false;
 		initTrain();
 		cannonTryingTime = 0f;
 		controlContext = CONTROL_CONTEXT.STOP;
@@ -2069,7 +2069,7 @@ public class LocalController : MonoBehaviour
 
 	private void LeaveCannon()
 	{
-		onceHideFps = false;
+		//onceHideFps = false;
 		bipAnimation.Stop("stand_h");
 		GetComponent<EquipCoordinator>().SetActiveCurrentWeapon(state: true);
 		cannon = null;

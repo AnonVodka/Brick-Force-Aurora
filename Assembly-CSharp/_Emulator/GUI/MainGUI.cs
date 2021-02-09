@@ -5,7 +5,7 @@ namespace _Emulator
     public class MainGUI : MonoBehaviour
     {
         public static MainGUI instance;
-        public bool setupHidden = false;
+        public bool setupHidden = true;
         public bool hostHidden = true;
         private Rect setupGUIRect = new Rect(0, 0, 200f, 0);
         private Rect hostGUIRect = new Rect(0, 0, 200f, 0);
@@ -13,42 +13,46 @@ namespace _Emulator
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F6))
-                setupHidden = !setupHidden;
+           //if (Input.GetKeyDown(KeyCode.F6))
+           //   setupHidden = !setupHidden;
 
             if (Input.GetKeyDown(KeyCode.F4))
                 hostHidden = !hostHidden;
+
+            if (Input.GetKeyDown(KeyCode.F10))
+                Application.Quit();
 
             ClientExtension.instance.HandleReliableKillLog();
         }
 
         private void OnGUI()
         {
-            if (!setupHidden)
-                setupGUIRect = GUILayout.Window(100, setupGUIRect, SetupGUIWindow, "Setup");
+            //if (!setupHidden)
+            //    setupGUIRect = GUILayout.Window(100, setupGUIRect, SetupGUIWindow, "Setup");
 
             if (!hostHidden && ServerEmulator.instance.serverCreated)
                 hostGUIRect = GUILayout.Window(101, hostGUIRect, HostGUIWindow, "Host");
         }
 
-        private void SetupGUIWindow(int winID)
-        {
-            GUILayout.Label("Host IP:");
-            ClientExtension.instance.hostIP = GUILayout.TextField(ClientExtension.instance.hostIP);
+        //private void SetupGUIWindow(int winID)
+        //{
+        //    GUILayout.Label("Host IP:");
 
-            if (GUILayout.Button("Host Match"))
-            {
-                hostHidden = true;
-                ServerEmulator.instance.SetupServer();
-                ClientExtension.instance.LoadServer();
-            }
+        //    ClientExtension.instance.hostIP = GUILayout.TextField(ClientExtension.instance.hostIP);
 
-            if (GUILayout.Button("Join Match"))
-            {
-                hostHidden = true;
-                ClientExtension.instance.LoadServer();
-            }
-        }
+        //    if (GUILayout.Button("Host Match"))
+        //    {
+        //        hostHidden = true;
+        //        ServerEmulator.instance.SetupServer();
+        //        ClientExtension.instance.LoadServer();
+        //    }
+
+        //    if (GUILayout.Button("Join Match"))
+        //    {
+        //        hostHidden = true;
+        //        ClientExtension.instance.LoadServer();
+        //    }
+        //}
 
         private void HostGUIWindow(int winID)
         {

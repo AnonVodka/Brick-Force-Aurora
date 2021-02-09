@@ -1443,1027 +1443,1076 @@ public class SockTcp
 			}
 			lock (this)
 			{
-				while (_readQueue != null && _readQueue.Count > 0)
-				{
-					Msg2Handle msg2Handle = (Msg2Handle)_readQueue.Peek();
-					if (!ClientExtension.instance.HandleMessage(msg2Handle))
-					switch (msg2Handle._id)
-					{
-					case 2:
-						HandleCS_LOGIN_ACK(msg2Handle._msg);
-						break;
-					case 5:
-						HandleCS_ADD_ROOM_ACK(msg2Handle._msg);
-						break;
-					case 8:
-						HandleCS_CREATE_ROOM_ACK(msg2Handle._msg);
-						break;
-					case 12:
-						HandleCS_QUICK_JOIN_ACK(msg2Handle._msg);
-						break;
-					case 10:
-						HandleCS_ENTER_ACK(msg2Handle._msg);
-						break;
-					case 11:
-						HandleCS_LEAVE_ACK(msg2Handle._msg);
-						break;
-					case 6:
-						HandleCS_DEL_ROOM_ACK(msg2Handle._msg);
-						break;
-					case 14:
-						HandleCS_ADD_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 16:
-						HandleCS_DEL_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 17:
-						HandleCS_EDIT_BRICK_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 18:
-						HandleCS_PALETTE_ACK(msg2Handle._msg);
-						break;
-					case 21:
-						HandleCS_CACHE_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 22:
-						HandleCS_CACHE_BRICK_DONE_ACK(msg2Handle._msg);
-						break;
-					case 25:
-						HandleCS_CHAT_ACK(msg2Handle._msg);
-						break;
-					case 27:
-						HandleCS_PLAYER_INFO_ACK(msg2Handle._msg);
-						break;
-					case 29:
-						HandleCS_JOIN_ACK(msg2Handle._msg);
-						break;
-					case 30:
-						HandleCS_UPDATE_ROOM_ACK(msg2Handle._msg);
-						break;
-					case 31:
-						HandleCS_MASTER_ACK(msg2Handle._msg);
-						break;
-					case 34:
-						HandleCS_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 36:
-						HandleCS_EQUIP_ACK(msg2Handle._msg);
-						break;
-					case 38:
-						HandleCS_UNEQUIP_ACK(msg2Handle._msg);
-						break;
-					case 40:
-						HandleCS_SAVE_ACK(msg2Handle._msg);
-						break;
-					case 41:
-						HandleCS_USERMAP_ACK(msg2Handle._msg);
-						break;
-					case 43:
-						HandleCS_LOAD_COMPLETE_ACK(msg2Handle._msg);
-						break;
-					case 45:
-						HandleCS_KILL_LOG_ACK(msg2Handle._msg);
-						break;
-					case 46:
-						HandleCS_SLOT_INFO_ACK(msg2Handle._msg);
-						break;
-					case 48:
-						HandleCS_SET_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 50:
-						HandleCS_START_ACK(msg2Handle._msg);
-						break;
-					case 52:
-						HandleCS_REGISTER_ACK(msg2Handle._msg);
-						break;
-					case 53:
-						HandleCS_COPYRIGHT_ACK(msg2Handle._msg);
-						break;
-					case 61:
-						HandleCS_REG_MAP_INFO_ACK(msg2Handle._msg);
-						break;
-					case 64:
-						HandleCS_RESPAWN_TICKET_ACK(msg2Handle._msg);
-						break;
-					case 66:
-						HandleCS_TIMER_ACK(msg2Handle._msg);
-						break;
-					case 67:
-						HandleCS_TEAM_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 68:
-						HandleCS_DEATH_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 69:
-						HandleCS_KILL_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 70:
-						HandleCS_TEAM_MATCH_END_ACK(msg2Handle._msg);
-						break;
-					case 72:
-						HandleCS_MATCH_COUNTDOWN_ACK(msg2Handle._msg);
-						break;
-					case 74:
-						HandleCS_BREAK_INTO_ACK(msg2Handle._msg);
-						break;
-					case 77:
-						HandleCS_DESTROY_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 78:
-						HandleCS_DESTROYED_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 79:
-						HandleCS_LOAD_START_ACK(msg2Handle._msg);
-						break;
-					case 84:
-						HandleCS_SEED_ACK(msg2Handle._msg);
-						break;
-					case 81:
-						HandleCS_TEAM_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 86:
-						HandleCS_SLOT_LOCK_ACK(msg2Handle._msg);
-						break;
-					case 87:
-						HandleCS_TEAM_CHANGE_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 89:
-						HandleCS_KICK_ACK(msg2Handle._msg);
-						break;
-					case 92:
-						HandleCS_ROOM_CONFIG_ACK(msg2Handle._msg);
-						break;
-					case 96:
-						HandleCS_RADIO_MSG_ACK(msg2Handle._msg);
-						break;
-					case 97:
-						HandleCS_WHISPER_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 99:
-						HandleCS_MY_MAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 101:
-						HandleCS_DOWNLOAD_THUMBNAIL_ACK(msg2Handle._msg);
-						break;
-					case 55:
-						HandleCS_CHANGE_USERMAP_ALIAS_ACK(msg2Handle._msg);
-						break;
-					case 57:
-						HandleCS_NEW_MAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 59:
-						HandleCS_RANK_MAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 102:
-						HandleCS_ASSET_ACK(msg2Handle._msg);
-						break;
-					case 104:
-						HandleCS_ADD_FRIEND_ACK(msg2Handle._msg);
-						break;
-					case 106:
-						HandleCS_ADD_BAN_ACK(msg2Handle._msg);
-						break;
-					case 108:
-						HandleCS_DEL_FRIEND_ACK(msg2Handle._msg);
-						break;
-					case 110:
-						HandleCS_DEL_BAN_ACK(msg2Handle._msg);
-						break;
-					case 113:
-						HandleCS_ADD_FRIEND_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 114:
-						HandleCS_DEL_FRIEND_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 115:
-						HandleCS_ADD_BAN_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 116:
-						HandleCS_DEL_BAN_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 117:
-						HandleCS_ADD_FRIEND_BY_NICKNAME_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 118:
-						HandleCS_ADD_BAN_BY_NICKNAME_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 119:
-						HandleCS_SVC_ENTER_ACK(msg2Handle._msg);
-						break;
-					case 120:
-						HandleCS_SVC_LEAVE_ACK(msg2Handle._msg);
-						break;
-					case 122:
-						HandleCS_BUY_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 124:
-						HandleCS_TERM_ITEM_EXPIRED_ACK(msg2Handle._msg);
-						break;
-					case 125:
-						HandleCS_MEMO_ACK(msg2Handle._msg);
-						break;
-					case 127:
-						HandleCS_SEND_MEMO_ACK(msg2Handle._msg);
-						break;
-					case 129:
-						HandleCS_PRESENT_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 131:
-						HandleCS_DEL_MEMO_ACK(msg2Handle._msg);
-						break;
-					case 133:
-						HandleCS_RCV_PRESENT_ACK(msg2Handle._msg);
-						break;
-					case 136:
-						HandleCS_P2P_COMPLETE_ACK(msg2Handle._msg);
-						break;
-					case 138:
-						HandleCS_RESULT_DONE_ACK(msg2Handle._msg);
-						break;
-					case 141:
-						HandleCS_CHANNEL_ACK(msg2Handle._msg);
-						break;
-					case 142:
-						HandleCS_CHANNEL_END_ACK(msg2Handle._msg);
-						break;
-					case 146:
-						HandleCS_ROAMIN_ACK(msg2Handle._msg);
-						break;
-					case 144:
-						HandleCS_ROAMOUT_ACK(msg2Handle._msg);
-						break;
-					case 147:
-						HandleCS_CUR_CHANNEL_ACK(msg2Handle._msg);
-						break;
-					case 148:
-						HandleCS_PLAYER_INIT_INFO_ACK(msg2Handle._msg);
-						break;
-					case 149:
-						HandleCS_DUPLICATE_REPORT_ACK(msg2Handle._msg);
-						break;
-					case 152:
-						HandleCS_LEVELUP_EVENT_ACK(msg2Handle._msg);
-						break;
-					case 153:
-						HandleCS_RENDEZVOUS_POINT_ACK(msg2Handle._msg);
-						break;
-					case 159:
-						HandleCS_GET_CANNON_ACK(msg2Handle._msg);
-						break;
-					case 161:
-						HandleCS_EMPTY_CANNON_ACK(msg2Handle._msg);
-						break;
-					case 162:
-						HandleCS_XTRAP_PACKET(msg2Handle._msg);
-						break;
-					case 163:
-						HandleCS_GOT_CANNON_ACK(msg2Handle._msg);
-						break;
-					case 164:
-						HandleCS_DOWNLOAD_THUMBNAIL_END_ACK(msg2Handle._msg);
-						break;
-					case 139:
-						HandleCS_ROUND_ROBIN_ACK(msg2Handle._msg);
-                        
-                        break;
-					case 165:
-						HandleCS_SERVICE_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 166:
-						HandleCS_WAITING_QUEUING_ACK(msg2Handle._msg);
-						break;
-					case 168:
-						HandleCS_UPDATE_SCRIPT_ACK(msg2Handle._msg);
-						break;
-					case 169:
-						HandleCS_UPDATE_SCRIPT_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 171:
-						HandleCS_TUTORIAL_COMPLETE_ACK(msg2Handle._msg);
-						break;
-					case 172:
-						HandleCS_APS_WARNING_ACK(msg2Handle._msg);
-						break;
-					case 173:
-						HandleCS_DOWNLOADED_MAP_ACK(msg2Handle._msg);
-						break;
-					case 175:
-						HandleCS_DOWNLOAD_MAP_ACK(msg2Handle._msg);
-						break;
-					case 177:
-						HandleCS_DEL_DOWNLOAD_MAP_ACK(msg2Handle._msg);
-						break;
-					case 179:
-						HandleCS_INDIVIDUAL_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 180:
-						HandleCS_INDIVIDUAL_MATCH_END_ACK(msg2Handle._msg);
-						break;
-					case 182:
-						HandleCS_MISSION_END_ACK(msg2Handle._msg);
-						break;
-					case 184:
-						HandleCS_PLAYER_DETAIL_ACK(msg2Handle._msg);
-						break;
-					case 185:
-						HandleCS_ASSIST_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 188:
-						HandleCS_CHECK_CLAN_NAME_AVAILABILITY_ACK(msg2Handle._msg);
-						break;
-					case 190:
-						HandleCS_CREATE_CLAN_ACK(msg2Handle._msg);
-						break;
-					case 192:
-						HandleCS_DESTROY_CLAN_ACK(msg2Handle._msg);
-						break;
-					case 194:
-						HandleCS_SEND_CLAN_INVITATION_ACK(msg2Handle._msg);
-						break;
-					case 196:
-						HandleCS_ANSWER_CLAN_INVITATION_ACK(msg2Handle._msg);
-						break;
-					case 197:
-						HandleCS_RESET_MY_CLAN_ACK(msg2Handle._msg);
-						break;
-					case 199:
-						HandleCS_LEAVE_CLAN_ACK(msg2Handle._msg);
-						break;
-					case 201:
-						HandleCS_CLAN_MEMBER_ACK(msg2Handle._msg);
-						break;
-					case 202:
-						HandleCS_CLAN_MEMBER_END_ACK(msg2Handle._msg);
-						break;
-					case 204:
-						HandleCS_SELECT_CLAN_INTRO_ACK(msg2Handle._msg);
-						break;
-					case 205:
-						HandleCS_ROUND_END_ACK(msg2Handle._msg);
-						break;
-					case 207:
-						HandleCS_CLAN_APPLICANT_ACK(msg2Handle._msg);
-						break;
-					case 208:
-						HandleCS_CLAN_APPLICANT_END_ACK(msg2Handle._msg);
-						break;
-					case 210:
-						HandleCS_CLAN_KICK_ACK(msg2Handle._msg);
-						break;
-					case 212:
-						HandleCS_UP_CLAN_MEMBER_ACK(msg2Handle._msg);
-						break;
-					case 214:
-						HandleCS_DOWN_CLAN_MEMBER_ACK(msg2Handle._msg);
-						break;
-					case 216:
-						HandleCS_TRANSFER_MASTER_ACK(msg2Handle._msg);
-						break;
-					case 218:
-						HandleCS_ACCEPT_APPLICANT_ACK(msg2Handle._msg);
-						break;
-					case 220:
-						HandleCS_OPEN_RANDOM_BOX_ACK(msg2Handle._msg);
-						break;
-					case 222:
-						HandleCS_APPLY_CLAN_ACK(msg2Handle._msg);
-						break;
-					case 224:
-						HandleCS_CHANGE_CLAN_INTRO_ACK(msg2Handle._msg);
-						break;
-					case 226:
-						HandleCS_CHANGE_CLAN_NOTICE_ACK(msg2Handle._msg);
-						break;
-					case 228:
-						HandleCS_CLAN_DETAIL_ACK(msg2Handle._msg);
-						break;
-					case 229:
-						HandleCS_ADD_CLANEE_ACK(msg2Handle._msg);
-						break;
-					case 230:
-						HandleCS_CLAN_INFO_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 231:
-						HandleCS_CLAN_NEW_MEMBER_ACK(msg2Handle._msg);
-						break;
-					case 232:
-						HandleCS_CLAN_DEL_MEMBER_ACK(msg2Handle._msg);
-						break;
-					case 235:
-						HandleCS_CHANGE_CLAN_MARK_ACK(msg2Handle._msg);
-						break;
-					case 236:
-						HandleCS_CLAN_MARK_CHANGED_ACK(msg2Handle._msg);
-						break;
-					case 238:
-						HandleCS_CREATE_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 240:
-						HandleCS_JOIN_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 242:
-						HandleCS_ENTER_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 247:
-						HandleCS_LEAVE_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 248:
-						HandleCS_ADD_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 249:
-						HandleCS_DEL_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 250:
-						HandleCS_UPDATE_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 254:
-						HandleCS_ENTER_SQUADING_ACK(msg2Handle._msg);
-						break;
-					case 256:
-						HandleCS_LEAVE_SQUADING_ACK(msg2Handle._msg);
-						break;
-					case 258:
-						HandleCS_KICK_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 260:
-						HandleCS_CHG_SQUAD_OPTION_ACK(msg2Handle._msg);
-						break;
-					case 261:
-						HandleCS_CLAN_MATCH_HALF_TIME_ACK(msg2Handle._msg);
-						break;
-					case 263:
-						HandleCS_GET_BACK2SPAWNER_ACK(msg2Handle._msg);
-						break;
-					case 265:
-						HandleCS_MATCH_RESTART_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 267:
-						HandleCS_MATCH_RESTARTED_ACK(msg2Handle._msg);
-						break;
-					case 269:
-						HandleCS_CLAN_MATCH_RECORD_LIST_ACK(msg2Handle._msg);
-						break;
-					case 271:
-						HandleCS_CLAN_MATCH_PLAYER_LIST_ACK(msg2Handle._msg);
-						break;
-					case 252:
-						HandleCS_MATCH_TEAM_START_ACK(msg2Handle._msg);
-						break;
-					case 273:
-						HandleCS_MATCH_TEAM_CANCEL_ACK(msg2Handle._msg);
-						break;
-					case 274:
-						HandleCS_MATCH_TEAM_SUCCESS_ACK(msg2Handle._msg);
-						break;
-					case 276:
-						HandleCS_CLAN_MATCH_TEAM_GETBACK_ACK(msg2Handle._msg);
-						break;
-					case 280:
-						HandleCS_BM_INSTALL_BOMB_ACK(msg2Handle._msg);
-						break;
-					case 282:
-						HandleCS_BM_UNINSTALL_BOMB_ACK(msg2Handle._msg);
-						break;
-					case 284:
-						HandleCS_BM_BLAST_ACK(msg2Handle._msg);
-						break;
-					case 286:
-						HandleCS_CTF_PICK_FLAG_ACK(msg2Handle._msg);
-						break;
-					case 288:
-						HandleCS_CTF_CAPTURE_FLAG_ACK(msg2Handle._msg);
-						break;
-					case 290:
-						HandleCS_CTF_DROP_FLAG_ACK(msg2Handle._msg);
-						break;
-					case 291:
-						HandleCS_BLAST_MODE_END_ACK(msg2Handle._msg);
-						break;
-					case 292:
-						HandleCS_CAPTURE_THE_FLAG_END_ACK(msg2Handle._msg);
-						break;
-					case 294:
-						HandleCS_BLAST_MODE_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 296:
-						HandleCS_CTF_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 298:
-						HandleCS_CLAN_LIST_ACK(msg2Handle._msg);
-						break;
-					case 299:
-						HandleCS_MISSION_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 300:
-						HandleCS_ROUND_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 301:
-						HandleCS_BM_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 302:
-						HandleCS_CTF_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 303:
-						HandleCS_ME_EDITOR_LIST_ACK(msg2Handle._msg);
-						break;
-					case 305:
-						HandleCS_ME_CHG_EDITOR_ACK(msg2Handle._msg);
-						break;
-					case 308:
-						HandleCS_INIT_TERM_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 310:
-						HandleCS_REBUY_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 312:
-						HandleCS_ERASE_DELETED_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 313:
-						HandleCS_ME_PREMIUM_BRICKS_ACK(msg2Handle._msg);
-						break;
-					case 314:
-						HandleCS_WEAPON_LEVEL_ACK(msg2Handle._msg);
-						break;
-					case 315:
-						HandleCS_BACK2BRIEFING_ACK(msg2Handle._msg);
-						break;
-					case 317:
-						HandleCS_DISCOMPOSE_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 318:
-						HandleCS_SHOP_ACK(msg2Handle._msg);
-						break;
-					case 319:
-						HandleCS_STAR_LEVEL_ACK(msg2Handle._msg);
-						break;
-					case 320:
-						HandleCS_RENDEZVOUS_INFO_ACK(msg2Handle._msg);
-						break;
-					case 321:
-						HandleCS_USERMAP_END_ACK(msg2Handle._msg);
-						break;
-					case 322:
-						HandleCS_SHOP_END_ACK(msg2Handle._msg);
-						break;
-					case 323:
-						HandleCS_WEAPON_MODIFIER_ACK(msg2Handle._msg);
-						break;
-					case 326:
-						HandleCS_LINE_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 328:
-						HandleCS_REPLACE_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 330:
-						HandleCS_LINE_BRICK_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 331:
-						HandleCS_REPLACE_BRICK_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 332:
-						HandleCS_SHOOTER_TOOL_ACK(msg2Handle._msg);
-						break;
-					case 338:
-						HandleCS_BND_MODE_END_ACK(msg2Handle._msg);
-						break;
-					case 339:
-						HandleCS_BND_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 340:
-						HandleCS_ME_REG_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 341:
-						HandleCS_ME_REG_BRICK_END_ACK(msg2Handle._msg);
-						break;
-					case 343:
-						HandleCS_DELETED_MAP_ACK(msg2Handle._msg);
-						break;
-					case 344:
-						HandleCS_BND_SHIFT_PHASE_ACK(msg2Handle._msg);
-						break;
-					case 346:
-						HandleCS_NOTICE_ACK(msg2Handle._msg);
-						break;
-					case 347:
-						HandleCS_AD_ACK(msg2Handle._msg);
-						break;
-					case 350:
-						HandleCS_WEAPON_DURABILITY_ACK(msg2Handle._msg);
-						break;
-					case 352:
-						HandleCS_REPAIR_WEAPON_ACK(msg2Handle._msg);
-						break;
-					case 354:
-						HandleCS_UPGRADE_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 355:
-						HandleCS_ITEM_PIMP_ACK(msg2Handle._msg);
-						break;
-					case 356:
-						HandleCS_PIMP_MODIFIER_ACK(msg2Handle._msg);
-						break;
-					case 358:
-						HandleCS_MERGE_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 359:
-						HandleCS_BUNDLE_ACK(msg2Handle._msg);
-						break;
-					case 361:
-						HandleCS_UNPACK_BUNDLE_ACK(msg2Handle._msg);
-						break;
-					case 362:
-						HandleCS_PROMO_LIST_ACK(msg2Handle._msg);
-						break;
-					case 363:
-						HandleCS_BOUGHTONCE_LIST_ACK(msg2Handle._msg);
-						break;
-					case 365:
-						HandleCS_I_AGREE_TOS_ACK(msg2Handle._msg);
-						break;
-					case 367:
-						HandleCS_CTF_FLAG_RETURN_ACK(msg2Handle._msg);
-						break;
-					case 370:
-						HandleCS_TC_OPEN_ACK(msg2Handle._msg);
-						break;
-					case 373:
-						HandleCS_TC_ENTER_ACK(msg2Handle._msg);
-						break;
-					case 375:
-						HandleCS_TC_CHEST_ACK(msg2Handle._msg);
-						break;
-					case 376:
-						HandleCS_TC_OPEN_PRIZE_TAG_ACK(msg2Handle._msg);
-						break;
-					case 377:
-						HandleCS_TC_TOOKOFF_ACK(msg2Handle._msg);
-						break;
-					case 378:
-						HandleCS_TC_UPDATE_CHEST_ACK(msg2Handle._msg);
-						break;
-					case 380:
-						HandleCS_TC_RECEIVE_PRIZE_ACK(msg2Handle._msg);
-						break;
-					case 381:
-						HandleCS_MISSION_ACK(msg2Handle._msg);
-						break;
-					case 382:
-						HandleCS_MISSION_WAIT_ACK(msg2Handle._msg);
-						break;
-					case 384:
-						HandleCS_ACCEPT_DAILY_MISSION_ACK(msg2Handle._msg);
-						break;
-					case 387:
-						HandleCS_COMPLETE_DAILY_MISSION_ACK(msg2Handle._msg);
-						break;
-					case 388:
-						HandleCS_PROGRESS_DAILY_MISSION_ACK(msg2Handle._msg);
-						break;
-					case 181:
-						HandleCS_CORE_HP_ACK(msg2Handle._msg);
-						break;
-					case 390:
-						HandleCS_STARTING_ACK(msg2Handle._msg);
-						break;
-					case 391:
-						HandleCS_TREASURE_ACK(msg2Handle._msg);
-						break;
-					case 394:
-						HandleCS_AUTO_LOGIN_ACK(msg2Handle._msg);
-						break;
-					case 396:
-						HandleCS_HASH_CHECK_ERROR_ACK(msg2Handle._msg);
-						break;
-					case 398:
-						HandleCS_CHARGE_PICKNWIN_COIN_ACK(msg2Handle._msg);
-						break;
-					case 401:
-						HandleCS_GADGET_ACK(msg2Handle._msg);
-						break;
-					case 403:
-						HandleCS_GADGET_ACTION_ACK(msg2Handle._msg);
-						break;
-					case 404:
-						HandleCS_GADGET_REMOVE_ACK(msg2Handle._msg);
-						break;
-					case 406:
-						HandleCS_RESET_USER_MAP_SLOTS_ACK(msg2Handle._msg);
-						break;
-					case 408:
-						HandleCS_INC_EXTRA_SLOTS_ACK(msg2Handle._msg);
-						break;
-					case 410:
-						HandleCS_AUTO_LOGIN_TO_RUNUP_ACK(msg2Handle._msg);
-						break;
-					case 412:
-						HandleCS_CREATE_CHARACTER_ACK(msg2Handle._msg);
-						break;
-					case 415:
-						HandleCS_WEAPON_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 416:
-						HandleCS_PLAYER_WEAPON_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 417:
-						HandleCS_PLAYER_OPT_ACK(msg2Handle._msg);
-						break;
-					case 418:
-						HandleCS_WEAPON_SLOT_ACK(msg2Handle._msg);
-						break;
-					case 421:
-						HandleCS_GENERIC_BUNDLE_ACK(msg2Handle._msg);
-						break;
-					case 422:
-						HandleCS_CUSTOM_STRING_ACK(msg2Handle._msg);
-						break;
-					case 424:
-						HandleCS_MAP_EVAL_ACK(msg2Handle._msg);
-						break;
-					case 426:
-						HandleCS_MY_DOWNLOAD_MAP_ACK(msg2Handle._msg);
-						break;
-					case 428:
-						HandleCS_MY_REGISTER_MAP_ACK(msg2Handle._msg);
-						break;
-					case 430:
-						HandleCS_USER_MAP_ACK(msg2Handle._msg);
-						break;
-					case 432:
-						HandleCS_ALL_MAP_ACK(msg2Handle._msg);
-						break;
-					case 434:
-						HandleCS_WEEKLY_CHART_ACK(msg2Handle._msg);
-						break;
-					case 436:
-						HandleCS_MAP_HONOR_ACK(msg2Handle._msg);
-						break;
-					case 438:
-						HandleCS_MAP_DETAIL_ACK(msg2Handle._msg);
-						break;
-					case 440:
-						HandleCS_MORE_COMMENT_ACK(msg2Handle._msg);
-						break;
-					case 442:
-						HandleCS_CHG_MAP_INTRO_ACK(msg2Handle._msg);
-						break;
-					case 444:
-						HandleCS_CHG_MAP_DOWNLOAD_FREE_ACK(msg2Handle._msg);
-						break;
-					case 446:
-						HandleCS_MAP_DAY_ACK(msg2Handle._msg);
-						break;
-					case 449:
-						HandleCS_CHG_DOOR_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 450:
-						HandleCS_OPEN_DOOR_ACK(msg2Handle._msg);
-						break;
-					case 451:
-						HandleCS_BUILDER_SLOT_ACK(msg2Handle._msg);
-						break;
-					case 452:
-						HandleCS_WEAPON_MODIFIER_EX_ACK(msg2Handle._msg);
-						break;
-					case 453:
-						HandleCS_ROOM_CONFIG_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 454:
-						HandleCS_SLOT_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 456:
-						HandleCS_MUTE_ACK(msg2Handle._msg);
-						break;
-					case 457:
-						HandleCS_YOU_ARE_MUTE_ACK(msg2Handle._msg);
-						break;
-					case 459:
-						HandleCS_AUTO_LOGIN_TO_NETMARBLE_ACK(msg2Handle._msg);
-						break;
-					case 461:
-						HandleCS_USERMAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 462:
-						HandleCS_SHOOTER_TOOL_LIST_ACK(msg2Handle._msg);
-						break;
-					case 463:
-						HandleCS_WEAPON_SLOT_LIST_ACK(msg2Handle._msg);
-						break;
-					case 464:
-						HandleCS_ITEM_LIST_ACK(msg2Handle._msg);
-						break;
-					case 465:
-						HandleCS_DOWNLOADED_MAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 466:
-						HandleCS_DELETED_MAP_LIST_ACK(msg2Handle._msg);
-						break;
-					case 467:
-						HandleCS_SVC_ENTER_LIST_ACK(msg2Handle._msg);
-						break;
-					case 468:
-						HandleCS_ROOM_LIST_ACK(msg2Handle._msg);
-						break;
-					case 470:
-						HandleCS_ROOM_ACK(msg2Handle._msg);
-						break;
-					case 472:
-						HandleCS_CHARGE_FORCE_POINT_ACK(msg2Handle._msg);
-						break;
-					case 473:
-						HandleCS_XP_ACK(msg2Handle._msg);
-						break;
-					case 475:
-						HandleCS_BUNGEE_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 476:
-						HandleCS_BUNGEE_MODE_END_ACK(msg2Handle._msg);
-						break;
-					case 477:
-						HandleCS_CUR_CHANNEL_SPECIFIC_INFO_AC(msg2Handle._msg);
-						break;
-					case 480:
-						HandleCS_BATCH_DEL_BRICK_ACK(msg2Handle._msg);
-						break;
-					case 482:
-						HandleCS_INVITE_ACK(msg2Handle._msg);
-						break;
-					case 483:
-						HandleCS_INVITED_ACK(msg2Handle._msg);
-						break;
-					case 485:
-						HandleCS_FOLLOWING_ACK(msg2Handle._msg);
-						break;
-					case 486:
-						HandleCS_NMPLAYAUTH_STATE_NOTI_ACK(msg2Handle._msg);
-						break;
-					case 487:
-						HandleCS_CPTR_ACK(msg2Handle._msg);
-						break;
-					case 488:
-						HandleCS_CPTR_REWARD_ACK(msg2Handle._msg);
-						break;
-					case 489:
-						HandleCS_LEVELUP_REWARD_ACK(msg2Handle._msg);
-						break;
-					case 490:
-						HandleCS_MISSION_REWARD_ACK(msg2Handle._msg);
-						break;
-					case 491:
-						HandleCS_ITEM_PROPERTY_ACK(msg2Handle._msg);
-						break;
-					case 492:
-						HandleCS_PREMIUM_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 493:
-						HandleCS_NETCAFE_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 495:
-						HandleCS_START_KICKOUT_VOTE_ACK(msg2Handle._msg);
-						break;
-					case 497:
-						HandleCS_KICKOUT_VOTE_ACK(msg2Handle._msg);
-						break;
-					case 498:
-						HandleCS_KICKOUT_VOTE_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 499:
-						HandleCS_KICKOUT_VOTE_END_ACK(msg2Handle._msg);
-						break;
-					case 500:
-						HandleCS_CUSTOM_GAME_CONFIG_ACK(msg2Handle._msg);
-						break;
-					case 502:
-						HandleCS_USE_CHANGE_NICKNAME_ACK(msg2Handle._msg);
-						break;
-					case 503:
-						HandleCS_NICKNAME_CHANGE_ACK(msg2Handle._msg);
-						break;
-					case 505:
-						HandleCS_LOGIN_TO_AXESO5_ACK(msg2Handle._msg);
-						break;
-					case 506:
-						HandleCS_BND_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 507:
-						HandleCS_BUNGEE_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 509:
-						HandleCS_MISSION_POINT_ACK(msg2Handle._msg);
-						break;
-					case 511:
-						HandleCS_ACCUSE_PLAYER_ACK(msg2Handle._msg);
-						break;
-					case 513:
-						HandleCS_ACCUSE_MAP_ACK(msg2Handle._msg);
-						break;
-					case 515:
-						HandleCS_RESET_BATTLE_RECORD_ACK(msg2Handle._msg);
-						break;
-					case 518:
-						HandleCS_RANDOM_INVITE_ACK(msg2Handle._msg);
-						break;
-					case 520:
-						HandleCS_ESCAPE_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 521:
-						HandleCS_ESCAPE_MODE_END_ACK(msg2Handle._msg);
-						break;
-					case 524:
-						HandleCS_ESCAPE_GOAL_ACK(msg2Handle._msg);
-						break;
-					case 527:
-						HandleCS_DROP_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 522:
-						HandleCS_ESCAPE_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 529:
-						HandleCS_PICKUP_DROPPED_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 530:
-						HandleCS_DEL_DROP_ITEM_ACK(msg2Handle._msg);
-						break;
-					case 531:
-						HandleCS_DROPITEM_QUICK_JOIN_USER_ACK(msg2Handle._msg);
-						break;
-					case 532:
-						HandleCS_STAR_RATE_ACK(msg2Handle._msg);
-						break;
-					case 533:
-						HandleCS_PICKUP_DROPPED_ITEM_FAIL_ACK(msg2Handle._msg);
-						break;
-					case 535:
-						HandleCS_MASTER_KICKING_ACK(msg2Handle._msg);
-						break;
-					case 536:
-						HandleCS_ZOMBIE_MODE_SCORE_ACK(msg2Handle._msg);
-						break;
-					case 537:
-						HandleCS_ZOMBIE_END_ACK(msg2Handle._msg);
-						break;
-					case 539:
-						HandleCS_ZOMBIE_INFECTION_ACK(msg2Handle._msg);
-						break;
-					case 541:
-						HandleCS_ZOMBIE_INFECT_ACK(msg2Handle._msg);
-						break;
-					case 542:
-						HandleCS_SELECT_WANTED_ACK(msg2Handle._msg);
-						break;
-					case 543:
-						HandleCS_KNOW_WANTED_ACK(msg2Handle._msg);
-						break;
-					case 544:
-						HandleCS_DESELECT_WANTED_ACK(msg2Handle._msg);
-						break;
-					case 546:
-						HandleCS_ZOMBIE_BREAK_INTO_ACK(msg2Handle._msg);
-						break;
-					case 548:
-						HandleCS_ZOMBIE_STATUS_ACK(msg2Handle._msg);
-						break;
-					case 550:
-						HandleCS_ADD_AMMO_ACK(msg2Handle._msg);
-						break;
-					case 552:
-						HandleCS_GET_TRAIN_ACK(msg2Handle._msg);
-						break;
-					case 554:
-						HandleCS_EMPTY_TRAIN_ACK(msg2Handle._msg);
-						break;
-					case 556:
-						HandleCS_CLAN_APPLY_LIST_ACK(msg2Handle._msg);
-						break;
-					case 558:
-						HandleCS_CLAN_CANCEL_APPLICATION_ACK(msg2Handle._msg);
-						break;
-					case 559:
-						HandleCS_CLAN_APPLICANT_COUNT_ACK(msg2Handle._msg);
-						break;
-					case 561:
-						HandleCS_CLAN_MATCHING_LIST_ACK(msg2Handle._msg);
-						break;
-					case 563:
-						HandleCS_CLAN_NEED_CREATE_POINT_ACK(msg2Handle._msg);
-						break;
-					case 564:
-						HandleCS_CLAN_CHANGE_ROOM_NAME_ACK(msg2Handle._msg);
-						break;
-					case 565:
-						HandleCS_CLAN_GET_OUT_SQUAD_ACK(msg2Handle._msg);
-						break;
-					case 277:
-						HandleCS_MATCH_TEAM_CANCELED_ACK(msg2Handle._msg);
-						break;
-					default:
-						Debug.LogError("Unknown msg encountered" + msg2Handle._id);
-						break;
-					}
-					if (_readQueue != null && _readQueue.Count > 0)
-					{
-						_readQueue.Dequeue();
-					}
-				}
+                while (_readQueue != null && _readQueue.Count > 0)
+                {
+                    Msg2Handle msg2Handle = (Msg2Handle)_readQueue.Peek();
+                    if (!ClientExtension.instance.HandleMessage(msg2Handle))
+                    {
+                        //Debug.Log("Recieved Message: ID: " + msg2Handle._id);
+                        switch (msg2Handle._id)
+                        {
+                            case 2:
+                                HandleCS_LOGIN_ACK(msg2Handle._msg);
+                                break;
+                            case 5:
+                                HandleCS_ADD_ROOM_ACK(msg2Handle._msg);
+                                break;
+                            case 8:
+                                HandleCS_CREATE_ROOM_ACK(msg2Handle._msg);
+                                break;
+                            case 12:
+                                HandleCS_QUICK_JOIN_ACK(msg2Handle._msg);
+                                break;
+                            case 10:
+                                HandleCS_ENTER_ACK(msg2Handle._msg);
+                                break;
+                            case 11:
+                                HandleCS_LEAVE_ACK(msg2Handle._msg);
+                                break;
+                            case 6:
+                                HandleCS_DEL_ROOM_ACK(msg2Handle._msg);
+                                break;
+                            case 14:
+                                HandleCS_ADD_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 16:
+                                HandleCS_DEL_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 17:
+                                HandleCS_EDIT_BRICK_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 18:
+                                HandleCS_PALETTE_ACK(msg2Handle._msg);
+                                break;
+                            case 21:
+                                HandleCS_CACHE_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 22:
+                                HandleCS_CACHE_BRICK_DONE_ACK(msg2Handle._msg);
+                                break;
+                            case 25:
+                                HandleCS_CHAT_ACK(msg2Handle._msg);
+                                break;
+                            case 27:
+                                HandleCS_PLAYER_INFO_ACK(msg2Handle._msg);
+                                break;
+                            case 29:
+                                HandleCS_JOIN_ACK(msg2Handle._msg);
+                                break;
+                            case 30:
+                                HandleCS_UPDATE_ROOM_ACK(msg2Handle._msg);
+                                break;
+                            case 31:
+                                HandleCS_MASTER_ACK(msg2Handle._msg);
+                                break;
+                            case 34:
+                                HandleCS_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 36:
+                                HandleCS_EQUIP_ACK(msg2Handle._msg);
+                                break;
+                            case 38:
+                                HandleCS_UNEQUIP_ACK(msg2Handle._msg);
+                                break;
+                            case 40:
+                                HandleCS_SAVE_ACK(msg2Handle._msg);
+                                break;
+                            case 41:
+                                HandleCS_USERMAP_ACK(msg2Handle._msg);
+                                break;
+                            case 43:
+                                HandleCS_LOAD_COMPLETE_ACK(msg2Handle._msg);
+                                break;
+                            case 45:
+                                HandleCS_KILL_LOG_ACK(msg2Handle._msg);
+                                break;
+                            case 46:
+                                HandleCS_SLOT_INFO_ACK(msg2Handle._msg);
+                                break;
+                            case 48:
+                                HandleCS_SET_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 50:
+                                HandleCS_START_ACK(msg2Handle._msg);
+                                break;
+                            case 52:
+                                HandleCS_REGISTER_ACK(msg2Handle._msg);
+                                break;
+                            case 53:
+                                HandleCS_COPYRIGHT_ACK(msg2Handle._msg);
+                                break;
+                            case 61:
+                                HandleCS_REG_MAP_INFO_ACK(msg2Handle._msg);
+                                break;
+                            case 64:
+                                HandleCS_RESPAWN_TICKET_ACK(msg2Handle._msg);
+                                break;
+                            case 66:
+                                HandleCS_TIMER_ACK(msg2Handle._msg);
+                                break;
+                            case 67:
+                                HandleCS_TEAM_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 68:
+                                HandleCS_DEATH_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 69:
+                                HandleCS_KILL_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 70:
+                                HandleCS_TEAM_MATCH_END_ACK(msg2Handle._msg);
+                                break;
+                            case 72:
+                                HandleCS_MATCH_COUNTDOWN_ACK(msg2Handle._msg);
+                                break;
+                            case 74:
+                                HandleCS_BREAK_INTO_ACK(msg2Handle._msg);
+                                break;
+                            case 77:
+                                HandleCS_DESTROY_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 78:
+                                HandleCS_DESTROYED_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 79:
+                                HandleCS_LOAD_START_ACK(msg2Handle._msg);
+                                break;
+                            case 84:
+                                HandleCS_SEED_ACK(msg2Handle._msg);
+                                break;
+                            case 81:
+                                HandleCS_TEAM_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 86:
+                                HandleCS_SLOT_LOCK_ACK(msg2Handle._msg);
+                                break;
+                            case 87:
+                                HandleCS_TEAM_CHANGE_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 89:
+                                HandleCS_KICK_ACK(msg2Handle._msg);
+                                break;
+                            case 92:
+                                HandleCS_ROOM_CONFIG_ACK(msg2Handle._msg);
+                                break;
+                            case 96:
+                                HandleCS_RADIO_MSG_ACK(msg2Handle._msg);
+                                break;
+                            case 97:
+                                HandleCS_WHISPER_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 99:
+                                HandleCS_MY_MAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 101:
+                                HandleCS_DOWNLOAD_THUMBNAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 55:
+                                HandleCS_CHANGE_USERMAP_ALIAS_ACK(msg2Handle._msg);
+                                break;
+                            case 57:
+                                HandleCS_NEW_MAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 59:
+                                HandleCS_RANK_MAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 102:
+                                HandleCS_ASSET_ACK(msg2Handle._msg);
+                                break;
+                            case 104:
+                                HandleCS_ADD_FRIEND_ACK(msg2Handle._msg);
+                                break;
+                            case 106:
+                                HandleCS_ADD_BAN_ACK(msg2Handle._msg);
+                                break;
+                            case 108:
+                                HandleCS_DEL_FRIEND_ACK(msg2Handle._msg);
+                                break;
+                            case 110:
+                                HandleCS_DEL_BAN_ACK(msg2Handle._msg);
+                                break;
+                            case 113:
+                                HandleCS_ADD_FRIEND_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 114:
+                                HandleCS_DEL_FRIEND_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 115:
+                                HandleCS_ADD_BAN_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 116:
+                                HandleCS_DEL_BAN_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 117:
+                                HandleCS_ADD_FRIEND_BY_NICKNAME_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 118:
+                                HandleCS_ADD_BAN_BY_NICKNAME_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 119:
+                                HandleCS_SVC_ENTER_ACK(msg2Handle._msg);
+                                break;
+                            case 120:
+                                HandleCS_SVC_LEAVE_ACK(msg2Handle._msg);
+                                break;
+                            case 122:
+                                HandleCS_BUY_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 124:
+                                HandleCS_TERM_ITEM_EXPIRED_ACK(msg2Handle._msg);
+                                break;
+                            case 125:
+                                HandleCS_MEMO_ACK(msg2Handle._msg);
+                                break;
+                            case 127:
+                                HandleCS_SEND_MEMO_ACK(msg2Handle._msg);
+                                break;
+                            case 129:
+                                HandleCS_PRESENT_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 131:
+                                HandleCS_DEL_MEMO_ACK(msg2Handle._msg);
+                                break;
+                            case 133:
+                                HandleCS_RCV_PRESENT_ACK(msg2Handle._msg);
+                                break;
+                            case 136:
+                                HandleCS_P2P_COMPLETE_ACK(msg2Handle._msg);
+                                break;
+                            case 138:
+                                HandleCS_RESULT_DONE_ACK(msg2Handle._msg);
+                                break;
+                            case 141:
+                                HandleCS_CHANNEL_ACK(msg2Handle._msg);
+                                break;
+                            case 142:
+                                HandleCS_CHANNEL_END_ACK(msg2Handle._msg);
+                                break;
+                            case 146:
+                                HandleCS_ROAMIN_ACK(msg2Handle._msg);
+                                break;
+                            case 144:
+                                HandleCS_ROAMOUT_ACK(msg2Handle._msg);
+                                break;
+                            case 147:
+                                HandleCS_CUR_CHANNEL_ACK(msg2Handle._msg);
+                                break;
+                            case 148:
+                                HandleCS_PLAYER_INIT_INFO_ACK(msg2Handle._msg);
+                                break;
+                            case 149:
+                                HandleCS_DUPLICATE_REPORT_ACK(msg2Handle._msg);
+                                break;
+                            case 152:
+                                HandleCS_LEVELUP_EVENT_ACK(msg2Handle._msg);
+                                break;
+                            case 153:
+                                HandleCS_RENDEZVOUS_POINT_ACK(msg2Handle._msg);
+                                break;
+                            case 159:
+                                HandleCS_GET_CANNON_ACK(msg2Handle._msg);
+                                break;
+                            case 161:
+                                HandleCS_EMPTY_CANNON_ACK(msg2Handle._msg);
+                                break;
+                            case 162:
+                                HandleCS_XTRAP_PACKET(msg2Handle._msg);
+                                break;
+                            case 163:
+                                HandleCS_GOT_CANNON_ACK(msg2Handle._msg);
+                                break;
+                            case 164:
+                                HandleCS_DOWNLOAD_THUMBNAIL_END_ACK(msg2Handle._msg);
+                                break;
+                            case 139:
+                                HandleCS_ROUND_ROBIN_ACK(msg2Handle._msg);
+                                break;
+                            case 165:
+                                HandleCS_SERVICE_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 166:
+                                HandleCS_WAITING_QUEUING_ACK(msg2Handle._msg);
+                                break;
+                            case 168:
+                                HandleCS_UPDATE_SCRIPT_ACK(msg2Handle._msg);
+                                break;
+                            case 169:
+                                HandleCS_UPDATE_SCRIPT_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 171:
+                                HandleCS_TUTORIAL_COMPLETE_ACK(msg2Handle._msg);
+                                break;
+                            case 172:
+                                HandleCS_APS_WARNING_ACK(msg2Handle._msg);
+                                break;
+                            case 173:
+                                HandleCS_DOWNLOADED_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 175:
+                                HandleCS_DOWNLOAD_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 177:
+                                HandleCS_DEL_DOWNLOAD_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 179:
+                                HandleCS_INDIVIDUAL_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 180:
+                                HandleCS_INDIVIDUAL_MATCH_END_ACK(msg2Handle._msg);
+                                break;
+                            case 182:
+                                HandleCS_MISSION_END_ACK(msg2Handle._msg);
+                                break;
+                            case 184:
+                                HandleCS_PLAYER_DETAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 185:
+                                HandleCS_ASSIST_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 188:
+                                HandleCS_CHECK_CLAN_NAME_AVAILABILITY_ACK(msg2Handle._msg);
+                                break;
+                            case 190:
+                                HandleCS_CREATE_CLAN_ACK(msg2Handle._msg);
+                                break;
+                            case 192:
+                                HandleCS_DESTROY_CLAN_ACK(msg2Handle._msg);
+                                break;
+                            case 194:
+                                HandleCS_SEND_CLAN_INVITATION_ACK(msg2Handle._msg);
+                                break;
+                            case 196:
+                                HandleCS_ANSWER_CLAN_INVITATION_ACK(msg2Handle._msg);
+                                break;
+                            case 197:
+                                HandleCS_RESET_MY_CLAN_ACK(msg2Handle._msg);
+                                break;
+                            case 199:
+                                HandleCS_LEAVE_CLAN_ACK(msg2Handle._msg);
+                                break;
+                            case 201:
+                                HandleCS_CLAN_MEMBER_ACK(msg2Handle._msg);
+                                break;
+                            case 202:
+                                HandleCS_CLAN_MEMBER_END_ACK(msg2Handle._msg);
+                                break;
+                            case 204:
+                                HandleCS_SELECT_CLAN_INTRO_ACK(msg2Handle._msg);
+                                break;
+                            case 205:
+                                HandleCS_ROUND_END_ACK(msg2Handle._msg);
+                                break;
+                            case 207:
+                                HandleCS_CLAN_APPLICANT_ACK(msg2Handle._msg);
+                                break;
+                            case 208:
+                                HandleCS_CLAN_APPLICANT_END_ACK(msg2Handle._msg);
+                                break;
+                            case 210:
+                                HandleCS_CLAN_KICK_ACK(msg2Handle._msg);
+                                break;
+                            case 212:
+                                HandleCS_UP_CLAN_MEMBER_ACK(msg2Handle._msg);
+                                break;
+                            case 214:
+                                HandleCS_DOWN_CLAN_MEMBER_ACK(msg2Handle._msg);
+                                break;
+                            case 216:
+                                HandleCS_TRANSFER_MASTER_ACK(msg2Handle._msg);
+                                break;
+                            case 218:
+                                HandleCS_ACCEPT_APPLICANT_ACK(msg2Handle._msg);
+                                break;
+                            case 220:
+                                HandleCS_OPEN_RANDOM_BOX_ACK(msg2Handle._msg);
+                                break;
+                            case 222:
+                                HandleCS_APPLY_CLAN_ACK(msg2Handle._msg);
+                                break;
+                            case 224:
+                                HandleCS_CHANGE_CLAN_INTRO_ACK(msg2Handle._msg);
+                                break;
+                            case 226:
+                                HandleCS_CHANGE_CLAN_NOTICE_ACK(msg2Handle._msg);
+                                break;
+                            case 228:
+                                HandleCS_CLAN_DETAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 229:
+                                HandleCS_ADD_CLANEE_ACK(msg2Handle._msg);
+                                break;
+                            case 230:
+                                HandleCS_CLAN_INFO_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 231:
+                                HandleCS_CLAN_NEW_MEMBER_ACK(msg2Handle._msg);
+                                break;
+                            case 232:
+                                HandleCS_CLAN_DEL_MEMBER_ACK(msg2Handle._msg);
+                                break;
+                            case 235:
+                                HandleCS_CHANGE_CLAN_MARK_ACK(msg2Handle._msg);
+                                break;
+                            case 236:
+                                HandleCS_CLAN_MARK_CHANGED_ACK(msg2Handle._msg);
+                                break;
+                            case 238:
+                                HandleCS_CREATE_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 240:
+                                HandleCS_JOIN_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 242:
+                                HandleCS_ENTER_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 247:
+                                HandleCS_LEAVE_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 248:
+                                HandleCS_ADD_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 249:
+                                HandleCS_DEL_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 250:
+                                HandleCS_UPDATE_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 254:
+                                HandleCS_ENTER_SQUADING_ACK(msg2Handle._msg);
+                                break;
+                            case 256:
+                                HandleCS_LEAVE_SQUADING_ACK(msg2Handle._msg);
+                                break;
+                            case 258:
+                                HandleCS_KICK_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 260:
+                                HandleCS_CHG_SQUAD_OPTION_ACK(msg2Handle._msg);
+                                break;
+                            case 261:
+                                HandleCS_CLAN_MATCH_HALF_TIME_ACK(msg2Handle._msg);
+                                break;
+                            case 263:
+                                HandleCS_GET_BACK2SPAWNER_ACK(msg2Handle._msg);
+                                break;
+                            case 265:
+                                HandleCS_MATCH_RESTART_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 267:
+                                HandleCS_MATCH_RESTARTED_ACK(msg2Handle._msg);
+                                break;
+                            case 269:
+                                HandleCS_CLAN_MATCH_RECORD_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 271:
+                                HandleCS_CLAN_MATCH_PLAYER_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 252:
+                                HandleCS_MATCH_TEAM_START_ACK(msg2Handle._msg);
+                                break;
+                            case 273:
+                                HandleCS_MATCH_TEAM_CANCEL_ACK(msg2Handle._msg);
+                                break;
+                            case 274:
+                                HandleCS_MATCH_TEAM_SUCCESS_ACK(msg2Handle._msg);
+                                break;
+                            case 276:
+                                HandleCS_CLAN_MATCH_TEAM_GETBACK_ACK(msg2Handle._msg);
+                                break;
+                            case 280:
+                                HandleCS_BM_INSTALL_BOMB_ACK(msg2Handle._msg);
+                                break;
+                            case 282:
+                                HandleCS_BM_UNINSTALL_BOMB_ACK(msg2Handle._msg);
+                                break;
+                            case 284:
+                                HandleCS_BM_BLAST_ACK(msg2Handle._msg);
+                                break;
+                            case 286:
+                                HandleCS_CTF_PICK_FLAG_ACK(msg2Handle._msg);
+                                break;
+                            case 288:
+                                HandleCS_CTF_CAPTURE_FLAG_ACK(msg2Handle._msg);
+                                break;
+                            case 290:
+                                HandleCS_CTF_DROP_FLAG_ACK(msg2Handle._msg);
+                                break;
+                            case 291:
+                                HandleCS_BLAST_MODE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 292:
+                                HandleCS_CAPTURE_THE_FLAG_END_ACK(msg2Handle._msg);
+                                break;
+                            case 294:
+                                HandleCS_BLAST_MODE_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 296:
+                                HandleCS_CTF_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 298:
+                                HandleCS_CLAN_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 299:
+                                HandleCS_MISSION_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 300:
+                                HandleCS_ROUND_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 301:
+                                HandleCS_BM_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 302:
+                                HandleCS_CTF_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 303:
+                                HandleCS_ME_EDITOR_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 305:
+                                HandleCS_ME_CHG_EDITOR_ACK(msg2Handle._msg);
+                                break;
+                            case 308:
+                                HandleCS_INIT_TERM_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 310:
+                                HandleCS_REBUY_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 312:
+                                HandleCS_ERASE_DELETED_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 313:
+                                HandleCS_ME_PREMIUM_BRICKS_ACK(msg2Handle._msg);
+                                break;
+                            case 314:
+                                HandleCS_WEAPON_LEVEL_ACK(msg2Handle._msg);
+                                break;
+                            case 315:
+                                HandleCS_BACK2BRIEFING_ACK(msg2Handle._msg);
+                                break;
+                            case 317:
+                                HandleCS_DISCOMPOSE_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 318:
+                                HandleCS_SHOP_ACK(msg2Handle._msg);
+                                break;
+                            case 319:
+                                HandleCS_STAR_LEVEL_ACK(msg2Handle._msg);
+                                break;
+                            case 320:
+                                HandleCS_RENDEZVOUS_INFO_ACK(msg2Handle._msg);
+                                break;
+                            case 321:
+                                HandleCS_USERMAP_END_ACK(msg2Handle._msg);
+                                break;
+                            case 322:
+                                HandleCS_SHOP_END_ACK(msg2Handle._msg);
+                                break;
+                            case 323:
+                                HandleCS_WEAPON_MODIFIER_ACK(msg2Handle._msg);
+                                break;
+                            case 326:
+                                HandleCS_LINE_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 328:
+                                HandleCS_REPLACE_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 330:
+                                HandleCS_LINE_BRICK_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 331:
+                                HandleCS_REPLACE_BRICK_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 332:
+                                HandleCS_SHOOTER_TOOL_ACK(msg2Handle._msg);
+                                break;
+                            case 338:
+                                HandleCS_BND_MODE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 339:
+                                HandleCS_BND_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 340:
+                                HandleCS_ME_REG_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 341:
+                                HandleCS_ME_REG_BRICK_END_ACK(msg2Handle._msg);
+                                break;
+                            case 343:
+                                HandleCS_DELETED_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 344:
+                                HandleCS_BND_SHIFT_PHASE_ACK(msg2Handle._msg);
+                                break;
+                            case 346:
+                                HandleCS_NOTICE_ACK(msg2Handle._msg);
+                                break;
+                            case 347:
+                                HandleCS_AD_ACK(msg2Handle._msg);
+                                break;
+                            case 350:
+                                HandleCS_WEAPON_DURABILITY_ACK(msg2Handle._msg);
+                                break;
+                            case 352:
+                                HandleCS_REPAIR_WEAPON_ACK(msg2Handle._msg);
+                                break;
+                            case 354:
+                                HandleCS_UPGRADE_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 355:
+                                HandleCS_ITEM_PIMP_ACK(msg2Handle._msg);
+                                break;
+                            case 356:
+                                HandleCS_PIMP_MODIFIER_ACK(msg2Handle._msg);
+                                break;
+                            case 358:
+                                HandleCS_MERGE_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 359:
+                                HandleCS_BUNDLE_ACK(msg2Handle._msg);
+                                break;
+                            case 361:
+                                HandleCS_UNPACK_BUNDLE_ACK(msg2Handle._msg);
+                                break;
+                            case 362:
+                                HandleCS_PROMO_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 363:
+                                HandleCS_BOUGHTONCE_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 365:
+                                HandleCS_I_AGREE_TOS_ACK(msg2Handle._msg);
+                                break;
+                            case 367:
+                                HandleCS_CTF_FLAG_RETURN_ACK(msg2Handle._msg);
+                                break;
+                            case 370:
+                                HandleCS_TC_OPEN_ACK(msg2Handle._msg);
+                                break;
+                            case 373:
+                                HandleCS_TC_ENTER_ACK(msg2Handle._msg);
+                                break;
+                            case 375:
+                                HandleCS_TC_CHEST_ACK(msg2Handle._msg);
+                                break;
+                            case 376:
+                                HandleCS_TC_OPEN_PRIZE_TAG_ACK(msg2Handle._msg);
+                                break;
+                            case 377:
+                                HandleCS_TC_TOOKOFF_ACK(msg2Handle._msg);
+                                break;
+                            case 378:
+                                HandleCS_TC_UPDATE_CHEST_ACK(msg2Handle._msg);
+                                break;
+                            case 380:
+                                HandleCS_TC_RECEIVE_PRIZE_ACK(msg2Handle._msg);
+                                break;
+                            case 381:
+                                HandleCS_MISSION_ACK(msg2Handle._msg);
+                                break;
+                            case 382:
+                                HandleCS_MISSION_WAIT_ACK(msg2Handle._msg);
+                                break;
+                            case 384:
+                                HandleCS_ACCEPT_DAILY_MISSION_ACK(msg2Handle._msg);
+                                break;
+                            case 387:
+                                HandleCS_COMPLETE_DAILY_MISSION_ACK(msg2Handle._msg);
+                                break;
+                            case 388:
+                                HandleCS_PROGRESS_DAILY_MISSION_ACK(msg2Handle._msg);
+                                break;
+                            case 181:
+                                HandleCS_CORE_HP_ACK(msg2Handle._msg);
+                                break;
+                            case 390:
+                                HandleCS_STARTING_ACK(msg2Handle._msg);
+                                break;
+                            case 391:
+                                HandleCS_TREASURE_ACK(msg2Handle._msg);
+                                break;
+                            case 394:
+                                HandleCS_AUTO_LOGIN_ACK(msg2Handle._msg);
+                                break;
+                            case 396:
+                                HandleCS_HASH_CHECK_ERROR_ACK(msg2Handle._msg);
+                                break;
+                            case 398:
+                                HandleCS_CHARGE_PICKNWIN_COIN_ACK(msg2Handle._msg);
+                                break;
+                            case 401:
+                                HandleCS_GADGET_ACK(msg2Handle._msg);
+                                break;
+                            case 403:
+                                HandleCS_GADGET_ACTION_ACK(msg2Handle._msg);
+                                break;
+                            case 404:
+                                HandleCS_GADGET_REMOVE_ACK(msg2Handle._msg);
+                                break;
+                            case 406:
+                                HandleCS_RESET_USER_MAP_SLOTS_ACK(msg2Handle._msg);
+                                break;
+                            case 408:
+                                HandleCS_INC_EXTRA_SLOTS_ACK(msg2Handle._msg);
+                                break;
+                            case 410:
+                                HandleCS_AUTO_LOGIN_TO_RUNUP_ACK(msg2Handle._msg);
+                                break;
+                            case 412:
+                                HandleCS_CREATE_CHARACTER_ACK(msg2Handle._msg);
+                                break;
+                            case 415:
+                                HandleCS_WEAPON_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 416:
+                                HandleCS_PLAYER_WEAPON_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 417:
+                                HandleCS_PLAYER_OPT_ACK(msg2Handle._msg);
+                                break;
+                            case 418:
+                                HandleCS_WEAPON_SLOT_ACK(msg2Handle._msg);
+                                {
+                                    msg2Handle._msg.Read(out int slot);
+                                    msg2Handle._msg.Read(out long nSeq);
+                                    Debug.Log("Acknowledged CS_WEAPON_SLOT for slot " + slot + " seq: " + nSeq);
+                                    if (MyInfoManager.Instance.WeaponSlots.Length > slot)
+                                    {
+                                        if (nSeq < 0)
+                                        {
+                                            MyInfoManager.Instance.WeaponSlots[slot] = -1L;
+                                        }
+                                        else
+                                        {
+                                            Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
+                                            if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
+                                            {
+                                                MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case 421:
+                                HandleCS_GENERIC_BUNDLE_ACK(msg2Handle._msg);
+                                break;
+                            case 422:
+                                HandleCS_CUSTOM_STRING_ACK(msg2Handle._msg);
+                                break;
+                            case 424:
+                                HandleCS_MAP_EVAL_ACK(msg2Handle._msg);
+                                break;
+                            case 426:
+                                HandleCS_MY_DOWNLOAD_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 428:
+                                HandleCS_MY_REGISTER_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 430:
+                                HandleCS_USER_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 432:
+                                HandleCS_ALL_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 434:
+                                HandleCS_WEEKLY_CHART_ACK(msg2Handle._msg);
+                                break;
+                            case 436:
+                                HandleCS_MAP_HONOR_ACK(msg2Handle._msg);
+                                break;
+                            case 438:
+                                HandleCS_MAP_DETAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 440:
+                                HandleCS_MORE_COMMENT_ACK(msg2Handle._msg);
+                                break;
+                            case 442:
+                                HandleCS_CHG_MAP_INTRO_ACK(msg2Handle._msg);
+                                break;
+                            case 444:
+                                HandleCS_CHG_MAP_DOWNLOAD_FREE_ACK(msg2Handle._msg);
+                                break;
+                            case 446:
+                                HandleCS_MAP_DAY_ACK(msg2Handle._msg);
+                                break;
+                            case 449:
+                                HandleCS_CHG_DOOR_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 450:
+                                HandleCS_OPEN_DOOR_ACK(msg2Handle._msg);
+                                break;
+                            case 451:
+                                HandleCS_BUILDER_SLOT_ACK(msg2Handle._msg);
+                                break;
+                            case 452:
+                                HandleCS_WEAPON_MODIFIER_EX_ACK(msg2Handle._msg);
+                                break;
+                            case 453:
+                                HandleCS_ROOM_CONFIG_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 454:
+                                HandleCS_SLOT_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 456:
+                                HandleCS_MUTE_ACK(msg2Handle._msg);
+                                break;
+                            case 457:
+                                HandleCS_YOU_ARE_MUTE_ACK(msg2Handle._msg);
+                                break;
+                            case 459:
+                                HandleCS_AUTO_LOGIN_TO_NETMARBLE_ACK(msg2Handle._msg);
+                                break;
+                            case 461:
+                                HandleCS_USERMAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 462:
+                                HandleCS_SHOOTER_TOOL_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 463:
+                                Debug.Log("Handling 463");
+                                {
+                                    msg2Handle._msg.Read(out int size);
+                                    for (int i = 0; i < size; i++)
+                                    {
+                                        msg2Handle._msg.Read(out int slot);
+                                        msg2Handle._msg.Read(out long nSeq);
+                                        if (MyInfoManager.Instance.WeaponSlots.Length > slot)
+                                        {
+                                            Debug.Log("Acknowledged CS_WEAPON_SLOT_LIST for slot " + slot + " seq: " + nSeq);
+                                            if (nSeq < 0)
+                                            {
+                                                MyInfoManager.Instance.WeaponSlots[slot] = -1L;
+                                            }
+                                            else
+                                            {
+                                                Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
+                                                if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
+                                                {
+                                                    MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                HandleCS_WEAPON_SLOT_LIST_ACK(msg2Handle._msg);
+                                Debug.Log("Done handling 463");
+                                break;
+                            case 464:
+                                HandleCS_ITEM_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 465:
+                                HandleCS_DOWNLOADED_MAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 466:
+                                HandleCS_DELETED_MAP_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 467:
+                                HandleCS_SVC_ENTER_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 468:
+                                HandleCS_ROOM_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 470:
+                                HandleCS_ROOM_ACK(msg2Handle._msg);
+                                break;
+                            case 472:
+                                HandleCS_CHARGE_FORCE_POINT_ACK(msg2Handle._msg);
+                                break;
+                            case 473:
+                                HandleCS_XP_ACK(msg2Handle._msg);
+                                break;
+                            case 475:
+                                HandleCS_BUNGEE_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 476:
+                                HandleCS_BUNGEE_MODE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 477:
+                                HandleCS_CUR_CHANNEL_SPECIFIC_INFO_AC(msg2Handle._msg);
+                                break;
+                            case 480:
+                                HandleCS_BATCH_DEL_BRICK_ACK(msg2Handle._msg);
+                                break;
+                            case 482:
+                                HandleCS_INVITE_ACK(msg2Handle._msg);
+                                break;
+                            case 483:
+                                HandleCS_INVITED_ACK(msg2Handle._msg);
+                                break;
+                            case 485:
+                                HandleCS_FOLLOWING_ACK(msg2Handle._msg);
+                                break;
+                            case 486:
+                                HandleCS_NMPLAYAUTH_STATE_NOTI_ACK(msg2Handle._msg);
+                                break;
+                            case 487:
+                                HandleCS_CPTR_ACK(msg2Handle._msg);
+                                break;
+                            case 488:
+                                HandleCS_CPTR_REWARD_ACK(msg2Handle._msg);
+                                break;
+                            case 489:
+                                HandleCS_LEVELUP_REWARD_ACK(msg2Handle._msg);
+                                break;
+                            case 490:
+                                HandleCS_MISSION_REWARD_ACK(msg2Handle._msg);
+                                break;
+                            case 491:
+                                HandleCS_ITEM_PROPERTY_ACK(msg2Handle._msg);
+                                break;
+                            case 492:
+                                HandleCS_PREMIUM_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 493:
+                                HandleCS_NETCAFE_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 495:
+                                HandleCS_START_KICKOUT_VOTE_ACK(msg2Handle._msg);
+                                break;
+                            case 497:
+                                HandleCS_KICKOUT_VOTE_ACK(msg2Handle._msg);
+                                break;
+                            case 498:
+                                HandleCS_KICKOUT_VOTE_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 499:
+                                HandleCS_KICKOUT_VOTE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 500:
+                                HandleCS_CUSTOM_GAME_CONFIG_ACK(msg2Handle._msg);
+                                break;
+                            case 502:
+                                HandleCS_USE_CHANGE_NICKNAME_ACK(msg2Handle._msg);
+                                break;
+                            case 503:
+                                HandleCS_NICKNAME_CHANGE_ACK(msg2Handle._msg);
+                                break;
+                            case 505:
+                                HandleCS_LOGIN_TO_AXESO5_ACK(msg2Handle._msg);
+                                break;
+                            case 506:
+                                HandleCS_BND_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 507:
+                                HandleCS_BUNGEE_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 509:
+                                HandleCS_MISSION_POINT_ACK(msg2Handle._msg);
+                                break;
+                            case 511:
+                                HandleCS_ACCUSE_PLAYER_ACK(msg2Handle._msg);
+                                break;
+                            case 513:
+                                HandleCS_ACCUSE_MAP_ACK(msg2Handle._msg);
+                                break;
+                            case 515:
+                                HandleCS_RESET_BATTLE_RECORD_ACK(msg2Handle._msg);
+                                break;
+                            case 518:
+                                HandleCS_RANDOM_INVITE_ACK(msg2Handle._msg);
+                                break;
+                            case 520:
+                                HandleCS_ESCAPE_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 521:
+                                HandleCS_ESCAPE_MODE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 524:
+                                HandleCS_ESCAPE_GOAL_ACK(msg2Handle._msg);
+                                break;
+                            case 527:
+                                HandleCS_DROP_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 522:
+                                HandleCS_ESCAPE_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 529:
+                                HandleCS_PICKUP_DROPPED_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 530:
+                                HandleCS_DEL_DROP_ITEM_ACK(msg2Handle._msg);
+                                break;
+                            case 531:
+                                HandleCS_DROPITEM_QUICK_JOIN_USER_ACK(msg2Handle._msg);
+                                break;
+                            case 532:
+                                HandleCS_STAR_RATE_ACK(msg2Handle._msg);
+                                break;
+                            case 533:
+                                HandleCS_PICKUP_DROPPED_ITEM_FAIL_ACK(msg2Handle._msg);
+                                break;
+                            case 535:
+                                HandleCS_MASTER_KICKING_ACK(msg2Handle._msg);
+                                break;
+                            case 536:
+                                HandleCS_ZOMBIE_MODE_SCORE_ACK(msg2Handle._msg);
+                                break;
+                            case 537:
+                                HandleCS_ZOMBIE_END_ACK(msg2Handle._msg);
+                                break;
+                            case 539:
+                                HandleCS_ZOMBIE_INFECTION_ACK(msg2Handle._msg);
+                                break;
+                            case 541:
+                                HandleCS_ZOMBIE_INFECT_ACK(msg2Handle._msg);
+                                break;
+                            case 542:
+                                HandleCS_SELECT_WANTED_ACK(msg2Handle._msg);
+                                break;
+                            case 543:
+                                HandleCS_KNOW_WANTED_ACK(msg2Handle._msg);
+                                break;
+                            case 544:
+                                HandleCS_DESELECT_WANTED_ACK(msg2Handle._msg);
+                                break;
+                            case 546:
+                                HandleCS_ZOMBIE_BREAK_INTO_ACK(msg2Handle._msg);
+                                break;
+                            case 548:
+                                HandleCS_ZOMBIE_STATUS_ACK(msg2Handle._msg);
+                                break;
+                            case 550:
+                                HandleCS_ADD_AMMO_ACK(msg2Handle._msg);
+                                break;
+                            case 552:
+                                HandleCS_GET_TRAIN_ACK(msg2Handle._msg);
+                                break;
+                            case 554:
+                                HandleCS_EMPTY_TRAIN_ACK(msg2Handle._msg);
+                                break;
+                            case 556:
+                                HandleCS_CLAN_APPLY_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 558:
+                                HandleCS_CLAN_CANCEL_APPLICATION_ACK(msg2Handle._msg);
+                                break;
+                            case 559:
+                                HandleCS_CLAN_APPLICANT_COUNT_ACK(msg2Handle._msg);
+                                break;
+                            case 561:
+                                HandleCS_CLAN_MATCHING_LIST_ACK(msg2Handle._msg);
+                                break;
+                            case 563:
+                                HandleCS_CLAN_NEED_CREATE_POINT_ACK(msg2Handle._msg);
+                                break;
+                            case 564:
+                                HandleCS_CLAN_CHANGE_ROOM_NAME_ACK(msg2Handle._msg);
+                                break;
+                            case 565:
+                                HandleCS_CLAN_GET_OUT_SQUAD_ACK(msg2Handle._msg);
+                                break;
+                            case 277:
+                                HandleCS_MATCH_TEAM_CANCELED_ACK(msg2Handle._msg);
+                                break;
+
+                            default:
+                                Debug.LogError("Unknown msg encountered " + msg2Handle._id);
+                                break;
+                        }
+                    }
+                    if (_readQueue != null && _readQueue.Count > 0)
+                    {
+                        _readQueue.Dequeue();
+                    }
+                }
 			}
 		}
 	}
@@ -3036,13 +3085,13 @@ public class SockTcp
 		Say(255, new MsgBody());
 	}
 
-	public void SendCS_CREATE_SQUAD_REQ(int clan, int wannaPlanyMap, int wannaPlayMode, int maxMember)
+	public void SendCS_CREATE_SQUAD_REQ(int clan, int wannaPlayMap, int wannaPlayMode, int maxMember)
 	{
 		if (!_waitingAck)
 		{
 			MsgBody msgBody = new MsgBody();
 			msgBody.Write(clan);
-			msgBody.Write(wannaPlanyMap);
+			msgBody.Write(wannaPlayMap);
 			msgBody.Write(wannaPlayMode);
 			msgBody.Write(maxMember);
 			Say(237, msgBody);
@@ -6025,10 +6074,10 @@ public class SockTcp
 
 	private void HandleCS_LOGIN_ACK(MsgBody msg)
 	{
-		msg.Read(out int val);
-		msg.Read(out int val2);
+		msg.Read(out int nSeq);
+		msg.Read(out int channelID);
         _waitingAck = false;
-		if (val >= 0)
+		if (nSeq >= 0)
 		{
 			if (GlobalVars.Instance.bRemember)
 			{
@@ -6038,8 +6087,8 @@ public class SockTcp
 			{
 				PlayerPrefs.SetString("myID", string.Empty);
 			}
-			MyInfoManager.Instance.Seq = val;
-			ChannelManager.Instance.LoginChannelId = val2;
+			MyInfoManager.Instance.Seq = nSeq;
+			ChannelManager.Instance.LoginChannelId = channelID;
 			if (!BuildOption.Instance.Props.ShowAgb || MyInfoManager.Instance.AgreeTos)
 			{
 				Application.LoadLevel("BfStart");
@@ -6054,7 +6103,7 @@ public class SockTcp
 			GameObject gameObject = GameObject.Find("Main");
 			if (null != gameObject)
 			{
-				gameObject.BroadcastMessage("OnLoginFailMessage", GetLoginFailString(val));
+				gameObject.BroadcastMessage("OnLoginFailMessage", GetLoginFailString(nSeq));
 			}
 		}
 	}
@@ -7743,30 +7792,33 @@ public class SockTcp
 		{
 			try
 			{
-				msg.Read(out int val2);
-				msg.Read(out int val3);
-				msg.Read(out string val4);
-				msg.Read(out string val5);
-				msg.Read(out int val6);
-				msg.Read(out int val7);
-				msg.Read(out int val8);
-				msg.Read(out int val9);
-				msg.Read(out byte val10);
-				msg.Read(out byte val11);
-				msg.Read(out ushort val12);
-				msg.Read(out ushort val13);
-				msg.Read(out int val14);
-				ChannelManager.Instance.UpdateAlways(val2, val3, val4, val5, val6, val7, val8, val9, val10, val11, val12, val13, val14);
-				if (val3 == 1)
+				msg.Read(out int id);
+				msg.Read(out int mode);
+				msg.Read(out string name);
+				msg.Read(out string ip);
+				msg.Read(out int port);
+				msg.Read(out int userCount);
+				msg.Read(out int maxUserCount);
+				msg.Read(out int country);
+				msg.Read(out byte minLvRank);
+				msg.Read(out byte maxLvRank);
+				msg.Read(out ushort xpBonus);
+				msg.Read(out ushort fpBonus);
+				msg.Read(out int limitStarRate);
+
+		        Debug.Log("Recieved new channel named " + name + " id: " + id);
+
+				ChannelManager.Instance.UpdateAlways(id, mode, name, ip, port, userCount, maxUserCount, country, minLvRank, maxLvRank, xpBonus, fpBonus, limitStarRate);
+                if (mode == 1)
 				{
-					BuildOption.Instance.Props.maxNewbieLevel = val11;
+					BuildOption.Instance.Props.maxNewbieLevel = maxLvRank;
 				}
 			}
 			catch (Exception ex)
 			{
 				Debug.LogError("CS_CHANNEL_ACK " + ex.Message.ToString());
-			}
-		}
+            }
+        }
 	}
 
 	private void HandleCS_CHANNEL_END_ACK(MsgBody msg)
@@ -9619,20 +9671,21 @@ public class SockTcp
 
 	private void HandleCS_WEAPON_SLOT_ACK(MsgBody msg)
 	{
-		msg.Read(out int val);
-		msg.Read(out long val2);
-		if (MyInfoManager.Instance.WeaponSlots.Length > val)
+        msg.Read(out int slot);
+		msg.Read(out long nSeq);
+        Debug.Log("Acknowledged CS_WEAPON_SLOT for slot " + slot + " seq: " + nSeq);
+		if (MyInfoManager.Instance.WeaponSlots.Length > slot)
 		{
-			if (val2 < 0)
+			if (nSeq < 0)
 			{
-				MyInfoManager.Instance.WeaponSlots[val] = -1L;
+				MyInfoManager.Instance.WeaponSlots[slot] = -1L;
 			}
 			else
 			{
-				Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(val2);
+				Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
 				if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
 				{
-					MyInfoManager.Instance.WeaponSlots[val] = val2;
+					MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
 				}
 			}
 		}
@@ -9640,23 +9693,26 @@ public class SockTcp
 
 	private void HandleCS_WEAPON_SLOT_LIST_ACK(MsgBody msg)
 	{
-		msg.Read(out int val);
-		for (int i = 0; i < val; i++)
+        Debug.Log("YO");
+		msg.Read(out int size);
+        Debug.Log(size);
+		for (int i = 0; i < size; i++)
 		{
-			msg.Read(out int val2);
-			msg.Read(out long val3);
-			if (MyInfoManager.Instance.WeaponSlots.Length > val2)
+			msg.Read(out int slot);
+			msg.Read(out long nSeq);
+            Debug.Log("Acknowledged CS_WEAPON_SLOT_LIST for slot " + slot + " seq: " + nSeq);
+			if (MyInfoManager.Instance.WeaponSlots.Length > slot)
 			{
-				if (val3 < 0)
+				if (nSeq < 0)
 				{
-					MyInfoManager.Instance.WeaponSlots[val2] = -1L;
+					MyInfoManager.Instance.WeaponSlots[slot] = -1L;
 				}
 				else
 				{
-					Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(val3);
+					Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
 					if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
 					{
-						MyInfoManager.Instance.WeaponSlots[val2] = val3;
+						MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
 					}
 				}
 			}
@@ -10708,6 +10764,7 @@ public class SockTcp
 
 	private void HandleCS_WEAPON_MODIFIER_EX_ACK(MsgBody msg)
 	{
+        Debug.Log("SockTcp::HandleCS_WEAPON_MODIFIER_EX_ACK");
 		msg.Read(out int val);
 		for (int i = 0; i < val; i++)
 		{
@@ -10732,14 +10789,14 @@ public class SockTcp
 	private void HandleCS_SVC_ENTER_LIST_ACK(MsgBody msg)
 	{
 		ChannelUserManager.Instance.Clear();
-		msg.Read(out int val);
-		for (int i = 0; i < val; i++)
+		msg.Read(out int size);
+		for (int i = 0; i < size; i++)
 		{
-			msg.Read(out int val2);
-			msg.Read(out string val3);
-			msg.Read(out int val4);
-			msg.Read(out int val5);
-			ChannelUserManager.Instance.AddUser(val2, val3, XpManager.Instance.GetLevel(val4), val5);
+			msg.Read(out int nSeq);
+			msg.Read(out string name);
+			msg.Read(out int xp);
+			msg.Read(out int rank);
+			ChannelUserManager.Instance.AddUser(nSeq, name, XpManager.Instance.GetLevel(xp), rank);
 		}
 	}
 

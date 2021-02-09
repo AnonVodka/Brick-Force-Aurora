@@ -140,7 +140,7 @@ public class CreateRoomDialog : Dialog
 
 	private UserMapInfo[] umi;
 
-	private string newMapName = string.Empty;
+	private string newMapName = "TEST_MAP";
 
 	private Vector2 skyboxScrollPosition = Vector2.zero;
 
@@ -160,7 +160,7 @@ public class CreateRoomDialog : Dialog
 
 	private int weaponOpt;
 
-	private int point;
+	private int point = 0;
 
 	private int round;
 
@@ -1718,14 +1718,15 @@ public class CreateRoomDialog : Dialog
 
 	private bool CreateMapEditorNew(UserMapInfo curUMI)
 	{
+        Debug.Log("CreateMapEditorNew");
 		if (CheckInput())
-		{
+        {
 			newMapName.Trim();
 			if (newMapName.Length <= 0)
 			{
 				MessageBoxMgr.Instance.AddMessage(StringMgr.Instance.Get("INPUT_MAP_NAME"));
-			}
-			else
+            }
+            else
 			{
 				if (newMapName.Length >= 2)
 				{
@@ -1742,6 +1743,7 @@ public class CreateRoomDialog : Dialog
 					};
 					if (CSNetManager.Instance.Sock.SendCS_CREATE_ROOM_REQ(0, roomTitle, roomPswd.Length > 0, roomPswd, Mathf.RoundToInt((float)maxPlayers), param, newMapName))
 					{
+                        Debug.Log("CreateBuildMode");
 						UserMapInfoManager.Instance.CreateBuildMode(curUMI.Slot, newMapName);
 					}
 					return true;

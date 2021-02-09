@@ -173,7 +173,7 @@ public class CSVLoader
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0024:;
+			
 		}
 		_loaded = true;
 		return true;
@@ -226,7 +226,6 @@ public class CSVLoader
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0054:;
 		}
 		_loaded = true;
 		return true;
@@ -270,7 +269,6 @@ public class CSVLoader
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0139:;
 		}
 		return true;
 	}
@@ -307,7 +305,6 @@ public class CSVLoader
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-		IL_0139:;
 		}
 		return true;
 	}
@@ -370,7 +367,6 @@ public class CSVLoader
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_01a3:;
 		}
 		return true;
 	}

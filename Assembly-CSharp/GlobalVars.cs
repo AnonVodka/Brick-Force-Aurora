@@ -1804,7 +1804,7 @@ public class GlobalVars : MonoBehaviour
 		}
 	}
 
-	public void BeginGUIWithBox(string boxStyle)
+	public void BeginGUIWithBox(string boxStyle, bool full = false)
 	{
 		if (IsScaleUI)
 		{
@@ -1828,8 +1828,15 @@ public class GlobalVars : MonoBehaviour
 			{
 				GUI.Box(ScreenRect, string.Empty);
 			}
-			GUI.BeginGroup(new Rect(((float)Screen.width - UIScreenRect.width) / 2f, ((float)Screen.height - UIScreenRect.height) / 2f, UIScreenRect.width, UIScreenRect.height));
-		}
+            if (full)
+            {
+                GUI.BeginGroup(new Rect(((float)Screen.width - UIScreenRect.width) /2f, ((float)Screen.height - UIScreenRect.height) /2f, Screen.width - ((float)Screen.width - UIScreenRect.width) / 2f - 50, Screen.height - ((float)Screen.height - UIScreenRect.height) / 2f - 50));
+            }
+            else
+            {
+			    GUI.BeginGroup(new Rect(((float)Screen.width - UIScreenRect.width) / 2f, ((float)Screen.height - UIScreenRect.height) / 2f, UIScreenRect.width, UIScreenRect.height));
+            }
+        }
 	}
 
 	public void BeginGUI(Texture2D bg)
@@ -2159,7 +2166,9 @@ public class GlobalVars : MonoBehaviour
 		{
 			wWWForm.AddField(item.Key, item.Value);
 		}
+#pragma warning disable CS0618 // Type or member is obsolete
 		WWW wWW = new WWW(url, wWWForm.data, headers);
+#pragma warning restore CS0618 // Type or member is obsolete
 		StartCoroutine(WaitForRequest(wWW));
 		return wWW;
 	}

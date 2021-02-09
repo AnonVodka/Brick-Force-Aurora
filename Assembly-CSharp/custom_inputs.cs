@@ -5,7 +5,7 @@ public class custom_inputs : MonoBehaviour
 {
 	private static custom_inputs instance;
 
-	private bool menuOn;
+	private bool menuOn = false;
 
 	public Texture2D inputManagerLogo;
 
@@ -86,7 +86,7 @@ public class custom_inputs : MonoBehaviour
 	[HideInInspector]
 	public bool[] isInputUp;
 
-	private string tempkeyPressed;
+	//private string tempkeyPressed;
 
 	private bool tempbool;
 

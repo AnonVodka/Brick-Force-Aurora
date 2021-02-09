@@ -242,6 +242,7 @@ public class RegMapManager : MonoBehaviour
 	private void Start()
 	{
 		string path = Path.Combine(Application.dataPath, "Resources/Cache");
+
 		if (!Directory.Exists(path))
 		{
 			Directory.CreateDirectory(path);

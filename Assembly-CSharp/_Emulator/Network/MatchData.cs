@@ -53,7 +53,6 @@ namespace _Emulator
             for (int i = 0; i < redSlots.Count; i++)
                 redSlots[i].isRed = true;
 
-
             room = new Room(false, 0, "", Room.ROOM_TYPE.TEAM_MATCH, Room.ROOM_STATUS.WAITING, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, false, false, false, 0, 0);
         }
 

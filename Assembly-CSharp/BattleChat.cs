@@ -21,7 +21,7 @@ public class BattleChat : MonoBehaviour
 
 	private Rect crdChatRead = new Rect(215f, 460f, 320f, 220f);
 
-	private int selected;
+	private int selected = 0;
 
 	private bool chatting;
 

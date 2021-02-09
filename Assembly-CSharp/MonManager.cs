@@ -51,7 +51,7 @@ public class MonManager : MonoBehaviour
 
 	public GameObject healerEff;
 
-	private MonController monContoller;
+	//private MonController monContoller;
 
 	private float flightHeight = 0.5f;
 

@@ -46,7 +46,7 @@ public class MapSettingChangeDlg : Dialog
 
 	private int maxIntroduceLength = 250;
 
-	private Good.BUY_HOW buyHow;
+	//private Good.BUY_HOW buyHow;
 
 	private Vector2 scrollPosition = Vector2.zero;
 

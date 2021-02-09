@@ -161,7 +161,7 @@ public class PriceTag
 
 	public string GetPriceString(Good.BUY_HOW buyHow, int percent)
 	{
-		int num = 0;
+		//int num = 0;
 		switch (buyHow)
 		{
 		case Good.BUY_HOW.GENERAL_POINT:

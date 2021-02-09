@@ -204,7 +204,6 @@ public class UserMap
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0191:;
 		}
 		return true;
 	}
@@ -300,7 +299,6 @@ public class UserMap
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0041:;
 		}
 		PostLoadInit();
 		return true;

@@ -342,7 +342,6 @@ public class RegMap
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0144:;
 		}
 		return true;
 	}
@@ -425,7 +424,6 @@ public class RegMap
 		{
 			Debug.LogError(ex.Message.ToString());
 			return false;
-			IL_0172:;
 		}
 		if (ver < latestFileVer)
 		{

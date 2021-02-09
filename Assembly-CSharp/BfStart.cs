@@ -120,8 +120,6 @@ public class BfStart : MonoBehaviour
 			GUI.skin = GUISkinFinder.Instance.GetGUISkin();
 			GUI.enabled = !DialogManager.Instance.IsModal;
 			Color byteColor2FloatColor = GlobalVars.Instance.GetByteColor2FloatColor(244, 151, 25);
-			string text = "BrickForce ver " + BuildOption.Instance.Major.ToString() + "." + BuildOption.Instance.Minor.ToString() + " " + BuildOption.Instance.Props.Alias + " Release: " + BuildOption.Instance.Build.ToString();
-			LabelUtil.TextOut(crdVer, text, "MiniLabel", Color.white, GlobalVars.txtEmptyColor, TextAnchor.UpperRight);
 			Texture2D logo = BuildOption.Instance.Props.logo;
 			if (null != logo)
 			{

@@ -14,7 +14,7 @@ public class ChangeChannel : MonoBehaviour
 
 	public float doubleClickTimeout = 0.2f;
 
-	private float lastClickTime;
+	//private float lastClickTime;
 
 	private Vector2 scrollPosition = Vector2.zero;
 

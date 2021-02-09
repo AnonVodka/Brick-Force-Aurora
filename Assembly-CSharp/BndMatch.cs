@@ -15,7 +15,7 @@ public class BndMatch : MonoBehaviour
 
 	private LocalController localController;
 
-	private string[] preUsebles;
+	//private string[] preUsebles;
 
 	private bool isBuilderMode;
 

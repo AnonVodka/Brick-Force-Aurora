@@ -278,7 +278,7 @@ public class DialogManager : MonoBehaviour
 
 	private Dialog[] silo;
 
-	private GUI.WindowFunction[] functions;
+	//private GUI.WindowFunction[] functions;
 
 	private static DialogManager _instance;
 

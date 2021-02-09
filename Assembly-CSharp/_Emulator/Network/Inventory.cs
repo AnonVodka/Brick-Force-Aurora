@@ -21,7 +21,7 @@ namespace _Emulator
         public Inventory(int _seq, CSVLoader _csv = null)
         {
             equipment = new List<Item>();
-            weaponChg = new Item[5];
+            weaponChg = new Item[10];
             shooterTools = new Item[5];
             activeSlots = new Item[16];
             csv = _csv;
@@ -154,7 +154,7 @@ namespace _Emulator
 
         public void GenerateActiveChange()
         {
-            weaponChg = new Item[5];
+            weaponChg = new Item[10];
             List<Item> activeChange = equipment.FindAll(x => x.IsWeaponSlotAble && x.toolSlot >= 0);
             weaponChgString = new string[activeChange.Count];
             for (int i = 0; i < activeChange.Count && i < weaponChg.Length; i++)
@@ -166,44 +166,54 @@ namespace _Emulator
 
         public void UpdateCSV()
         {
-            csv.Save("Config\\InventoryBackup.csv");
-            GenerateActiveSlots();
-            GenerateActiveTools();
-            GenerateActiveChange();
-
-            List<Item> nonEquippedItems = equipment.FindAll(x => x.Usage == Item.USAGE.UNEQUIP && x.toolSlot < 0);
-            int row = 0;
-            int slot = 0;
-            int count = activeSlots.Length;
-            for (; row < count; row++, slot++)
+            try
             {
-                csv._rows[row][1] = activeSlots[slot] == null ? "" : activeSlots[slot].Code;
-            }
+                csv.Save("Config\\InventoryBackup.csv");
+                GenerateActiveSlots();
+                GenerateActiveTools();
+                GenerateActiveChange();
 
-            slot = 0;
-            count += shooterTools.Length;
-            for (; row < count; row++, slot++)
+                List<Item> nonEquippedItems = equipment.FindAll(x => x.Usage == Item.USAGE.UNEQUIP && x.toolSlot < 0);
+                int row = 0;
+                int slot = 0;
+                int count = activeSlots.Length;
+                for (; row < count; row++, slot++)
+                {
+                    csv._rows[row][1] = activeSlots[slot] == null ? "" : activeSlots[slot].Code;
+                }
+
+                slot = 0;
+                count += shooterTools.Length;
+                for (; row < count; row++, slot++)
+                {
+                    csv._rows[row][1] = shooterTools[slot] == null ? "" : shooterTools[slot].Code;
+                }
+
+                slot = 0;
+                count += weaponChg.Length;
+                for (; row < count; row++, slot++)
+                {
+                    csv._rows[row][1] = weaponChg[slot] == null ? "" : weaponChg[slot].Code;
+                }
+
+                int remainCount = csv.Rows - 31;
+                csv._rows.RemoveRange(31, remainCount);
+
+                csv._rows.Add(new string[] { "Inventory", nonEquippedItems[0].Code });
+
+                for (int i = 1; i < nonEquippedItems.Count; i++)
+                {
+                    csv._rows.Add(new string[] { "", nonEquippedItems[i].Code });
+                }
+
+                Apply();
+
+            }
+            catch (Exception ex)
             {
-                csv._rows[row][1] = shooterTools[slot] == null ? "" : shooterTools[slot].Code;
+                Debug.Log("An error happened in Inventory.cs:");
+                Debug.LogException(ex);
             }
-
-            slot = 0;
-            count += weaponChg.Length;
-            for (; row < count; row++, slot++)
-            {
-                csv._rows[row][1] = weaponChg[slot] == null ? "" : weaponChg[slot].Code;
-            }
-            int remainCount = csv.Rows - 26;
-            csv._rows.RemoveRange(26, remainCount);
-
-            csv._rows.Add(new string[] { "Inventory", nonEquippedItems[0].Code });
-
-            for (int i = 1; i < nonEquippedItems.Count; i++)
-            {
-                csv._rows.Add(new string[] { "", nonEquippedItems[i].Code });
-            }
-
-            Apply();
         }
 
         public void Save()

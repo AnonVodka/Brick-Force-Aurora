@@ -59,7 +59,7 @@ public class LobbyTools
 
 	private Vector2 overallSize = Vector2.zero;
 
-	private TAB currentTab;
+	private TAB currentTab = TAB.ROOM_LIST;
 
 	public float WidthToolbar => overallSize.x;
 

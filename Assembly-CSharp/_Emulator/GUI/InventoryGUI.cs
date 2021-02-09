@@ -48,50 +48,51 @@ namespace _Emulator
 
         private void OnGUI()
         {
-            if (hidden)
-                return;
-
-            if (ClientExtension.instance.clientConnected && TItemManager.Instance != null && ClientExtension.instance.inventory != null)
+            if (!hidden)
             {
-                if (!ranGUI)
-                { 
-                    sortedItems = TItemManager.Instance.dic.OrderByDescending(x => x.Value.slot).ToDictionary(x => x.Key, x => x.Value);
-                    ranGUI = true;
-                }
-                FitToScreen();
-                iconGUIRect = GUI.Window(102, iconGUIRect, IconGUIWindow, "Items");
-                inventoryGUIRect = GUI.Window(103, inventoryGUIRect, InventoryGUIWindow, "Inventory");
-
-                sortText = GUI.TextField(sortTextFieldRect, sortText);
-
-                sortIcons = GUI.Toggle(sortIconsButtonRect, sortIcons, "Sort", "Button");
-
-                if (GUI.Button(updateButtonRect, "Update Inventory"))
+                if (ClientExtension.instance.clientConnected && TItemManager.Instance != null && ClientExtension.instance.inventory != null)
                 {
-                    ClientExtension.instance.inventory.UpdateCSV();
-                    ClientExtension.instance.SendInventoryCSV();
+                    if (!ranGUI)
+                    {
+                        sortedItems = TItemManager.Instance.dic.OrderByDescending(x => x.Value.slot).ToDictionary(x => x.Key, x => x.Value);
+                        ranGUI = true;
+                    }
+                    FitToScreen();
+                    iconGUIRect = GUI.Window(102, iconGUIRect, IconGUIWindow, "Items");
+                    inventoryGUIRect = GUI.Window(103, inventoryGUIRect, InventoryGUIWindow, "Inventory");
+
+                    sortText = GUI.TextField(sortTextFieldRect, sortText);
+
+                    sortIcons = GUI.Toggle(sortIconsButtonRect, sortIcons, "Sort", "Button");
+
+                    if (GUI.Button(updateButtonRect, "Update Inventory"))
+                    {
+                        ClientExtension.instance.inventory.UpdateCSV();
+                        ClientExtension.instance.SendInventoryCSV();
+                    }
+
+                    if (GUI.Button(saveButtonRect, "Save Inventory"))
+                    {
+                        ClientExtension.instance.inventory.UpdateCSV();
+                        ClientExtension.instance.inventory.Save();
+                        ClientExtension.instance.SendInventoryCSV();
+                    }
+
+                    if (GUI.Button(loadButtonRect, "Load Inventory"))
+                    {
+                        ClientExtension.instance.inventory.LoadInventoryFromDisk();
+                        if (sortInventory)
+                            ClientExtension.instance.inventory.Sort();
+                        ClientExtension.instance.SendInventoryCSV();
+                    }
+
+                    sortInventory = GUI.Toggle(sortButtonRect, sortInventory, "Sort Inventory", "Button");
+
+                    showNames = GUI.Toggle(showNamesButtonRect, showNames, "Show Names", "Button");
                 }
-
-                if (GUI.Button(saveButtonRect, "Save Inventory"))
-                {
-                    ClientExtension.instance.inventory.UpdateCSV();
-                    ClientExtension.instance.inventory.Save();
-                    ClientExtension.instance.SendInventoryCSV();
-                }
-
-                if (GUI.Button(loadButtonRect, "Load Inventory"))
-                {
-                    ClientExtension.instance.inventory.LoadInventoryFromDisk();
-                    if (sortInventory)
-                        ClientExtension.instance.inventory.Sort();
-                    ClientExtension.instance.SendInventoryCSV();
-                }
-
-                sortInventory = GUI.Toggle(sortButtonRect, sortInventory, "Sort Inventory", "Button");
-
-                showNames = GUI.Toggle(showNamesButtonRect, showNames, "Show Names", "Button");
             }
         }
+
         private void IconGUIWindow(int winID)
         {
             Dictionary<string, TItem> activeDic = sortIcons ? sortedItems : TItemManager.Instance.dic;
@@ -101,7 +102,7 @@ namespace _Emulator
                 int j = 0;
                 foreach (KeyValuePair<string, TItem> item in activeDic)
                 {
-                    if (item.Value.Name.ToLower().Contains(sortText.ToLower()))
+                    if (item.Value.Name.ToLower().Contains(sortText.ToLower()) || item.Value.code.ToLower().Contains(sortText.ToLower()))
                     {
                         iconScrollPosition.y = 92f * j;
                         break;
@@ -118,14 +119,18 @@ namespace _Emulator
                 Rect labelRect = new Rect(buttonRect);
                 labelRect.y -= 4;
                 labelRect.x += 1;
-                if (GUI.Button(buttonRect, item.Value.CurIcon()))
+
+                if (item.Value.Name.ToLower().Contains(sortText.ToLower()) || item.Value.code.ToLower().Contains(sortText.ToLower()))
                 {
-                    GlobalVars.Instance.PlaySoundItemInstall();
-                    ClientExtension.instance.inventory.AddItem(item.Value, sortInventory);
+                    if (GUI.Button(buttonRect, item.Value.CurIcon()))
+                    {
+                        GlobalVars.Instance.PlaySoundItemInstall();
+                        ClientExtension.instance.inventory.AddItem(item.Value, sortInventory);
+                    }
+                    if (showNames)
+                        GUI.Label(labelRect, item.Value.Name + "("+item.Value.code + " : " + item.Value.catType + " : " + item.Value.catKind + ")");
+                    i++;
                 }
-                if (showNames)
-                    GUI.Label(labelRect, item.Value.Name);
-                i++;
             }
             GUI.EndScrollView();
         }

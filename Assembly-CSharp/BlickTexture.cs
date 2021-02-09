@@ -4,9 +4,9 @@ using UnityEngine;
 [Serializable]
 public class BlickTexture
 {
-	private float ux;
+	//private float ux;
 
-	private float uy;
+	//private float uy;
 
 	private bool isActive;
 

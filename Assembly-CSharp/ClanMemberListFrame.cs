@@ -14,7 +14,7 @@ public class ClanMemberListFrame
 
 	private Vector2 crdUser = new Vector2(260f, 27f);
 
-	private float firstClanMemberY;
+	private float firstClanMemberY = 0f;
 
 	private float clanMemberOffset = 28f;
 
