@@ -39,7 +39,7 @@
 ![](https://i.imgur.com/6ncbt4O.png)
 
 ## Inventory Editor
-![](https://i.imgur.com/teJ36Lz.png)
+![](https://i.imgur.com/TDtc2z1.png)
 
 - Click on items in the left list to add them to the inventory
 - Click on items in the inventory to remove them
