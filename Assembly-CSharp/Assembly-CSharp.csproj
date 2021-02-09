@@ -724,7 +724,6 @@
     <Compile Include="ZombieVsHumanManager.cs" />
     <Compile Include="_Emulator\Config.cs" />
     <Compile Include="_Emulator\GUI\InventoryGUI.cs" />
-    <Compile Include="_Emulator\GUI\NewInventoryGUI.cs" />
     <Compile Include="_Emulator\Hooks.cs" />
     <Compile Include="_Emulator\Core.cs" />
     <Compile Include="_Emulator\GUI\MainGUI.cs" />
