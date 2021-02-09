@@ -22,15 +22,15 @@
 - Various bug fixes over the original game
 
 ## How To Play
-![](https://i.imgur.com/OUqQ5dR.png)
+![](https://i.imgur.com/IboilMq.png)
 
 - Download the newest release
 - Get into a network (VPN or LAN) with other players (recommended free VPN: ZeroTier)
 - Make sure to allow any firewall exceptions that may pop up in the process
-- One player will act as host, make sure to put his network IP in the Host IP text field after starting the game (default value can be set in Config)
-- You can use localhost as Host IP (127.0.0.1) if you just want to test alone
-- Put your custom username into the regular E-mail text field
-- Host needs to click Host Match, after that the other players click Join Match
+- One player will act as host, make sure to put his network IP in the Custom IP text field after starting the game (default value can be set in Config)
+- Set Server-IP to "Custom" if you want to join someone else, set it to "Localhost" if you want to test alone
+- Put your custom username into the ID text field
+- Host needs to click Host Match, after that the other players click the big play button
 - After connecting, click Play to proceed to the main menu and create a room (others may need to refresh the room list in order to join)
 - Make sure everyone has the files for the current map loaded
 - Room master can start the match once every player is ready (you can also start alone)
@@ -39,7 +39,7 @@
 ![](https://i.imgur.com/6ncbt4O.png)
 
 ## Inventory Editor
-![](https://i.imgur.com/teJ36Lz.png)
+![](https://i.imgur.com/3I9JFux.png)
 
 - Click on items in the left list to add them to the inventory
 - Click on items in the inventory to remove them
@@ -65,7 +65,6 @@
 ## Controls
 - F4: Host Menu
 - F5: Inventory Editor
-- F6: Setup Menu
 - F8: Debug Console
 
 ## Limitations
@@ -82,3 +81,12 @@
 - Code in _Emulator folder is newly added to the game
 - Other code is mostly reverse engineered (decompiled) from the original game and refined so it compiles as a VS project
 - Therefore commercial use of this project is not recommended
+- In order to join custom servers you can either set the "Server-IP" field to "Custom" or edit the **ServerIPS.csv** file in your Config folder
+- In order to use this version of the brick force aurora client, you have to edit the **Inventory.csv** file and add the following lines below "Change 5"
+```
+Change 6	
+Change 7	
+Change 8	
+Change 9	
+Change 10	
+```
