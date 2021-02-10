@@ -6,5 +6,9 @@
 *.dll
 *.pdb
 /.vs
-/Assembly-CSharp/obj
-/Assembly-CSharp/bin
+[Dd]ebug/
+[Rr]elease/
+[Mm]ine/
+x64/
+[Bb]in/
+[Oo]bj/
