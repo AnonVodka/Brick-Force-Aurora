@@ -2169,27 +2169,8 @@ public class SockTcp
                                 HandleCS_PLAYER_OPT_ACK(msg2Handle._msg);
                                 break;
                             case 418:
+                                // Hooks.cs: line 300
                                 HandleCS_WEAPON_SLOT_ACK(msg2Handle._msg);
-                                {
-                                    msg2Handle._msg.Read(out int slot);
-                                    msg2Handle._msg.Read(out long nSeq);
-                                    Debug.Log("Acknowledged CS_WEAPON_SLOT for slot " + slot + " seq: " + nSeq);
-                                    if (MyInfoManager.Instance.WeaponSlots.Length > slot)
-                                    {
-                                        if (nSeq < 0)
-                                        {
-                                            MyInfoManager.Instance.WeaponSlots[slot] = -1L;
-                                        }
-                                        else
-                                        {
-                                            Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
-                                            if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
-                                            {
-                                                MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
-                                            }
-                                        }
-                                    }
-                                }
                                 break;
                             case 421:
                                 HandleCS_GENERIC_BUNDLE_ACK(msg2Handle._msg);
@@ -2267,33 +2248,8 @@ public class SockTcp
                                 HandleCS_SHOOTER_TOOL_LIST_ACK(msg2Handle._msg);
                                 break;
                             case 463:
-                                Debug.Log("Handling 463");
-                                {
-                                    msg2Handle._msg.Read(out int size);
-                                    for (int i = 0; i < size; i++)
-                                    {
-                                        msg2Handle._msg.Read(out int slot);
-                                        msg2Handle._msg.Read(out long nSeq);
-                                        if (MyInfoManager.Instance.WeaponSlots.Length > slot)
-                                        {
-                                            Debug.Log("Acknowledged CS_WEAPON_SLOT_LIST for slot " + slot + " seq: " + nSeq);
-                                            if (nSeq < 0)
-                                            {
-                                                MyInfoManager.Instance.WeaponSlots[slot] = -1L;
-                                            }
-                                            else
-                                            {
-                                                Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
-                                                if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
-                                                {
-                                                    MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                // Hooks.cs: line 323
                                 HandleCS_WEAPON_SLOT_LIST_ACK(msg2Handle._msg);
-                                Debug.Log("Done handling 463");
                                 break;
                             case 464:
                                 HandleCS_ITEM_LIST_ACK(msg2Handle._msg);
@@ -6077,6 +6033,7 @@ public class SockTcp
 		msg.Read(out int nSeq);
 		msg.Read(out int channelID);
         _waitingAck = false;
+
 		if (nSeq >= 0)
 		{
 			if (GlobalVars.Instance.bRemember)
@@ -7805,8 +7762,6 @@ public class SockTcp
 				msg.Read(out ushort xpBonus);
 				msg.Read(out ushort fpBonus);
 				msg.Read(out int limitStarRate);
-
-		        Debug.Log("Recieved new channel named " + name + " id: " + id);
 
 				ChannelManager.Instance.UpdateAlways(id, mode, name, ip, port, userCount, maxUserCount, country, minLvRank, maxLvRank, xpBonus, fpBonus, limitStarRate);
                 if (mode == 1)
@@ -9693,14 +9648,11 @@ public class SockTcp
 
 	private void HandleCS_WEAPON_SLOT_LIST_ACK(MsgBody msg)
 	{
-        Debug.Log("YO");
 		msg.Read(out int size);
-        Debug.Log(size);
 		for (int i = 0; i < size; i++)
 		{
 			msg.Read(out int slot);
 			msg.Read(out long nSeq);
-            Debug.Log("Acknowledged CS_WEAPON_SLOT_LIST for slot " + slot + " seq: " + nSeq);
 			if (MyInfoManager.Instance.WeaponSlots.Length > slot)
 			{
 				if (nSeq < 0)
@@ -9710,7 +9662,8 @@ public class SockTcp
 				else
 				{
 					Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(nSeq);
-					if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
+					if (itemBySequence != null && itemBySequence.Template != null 
+                        && itemBySequence.Template.type == TItem.TYPE.WEAPON)
 					{
 						MyInfoManager.Instance.WeaponSlots[slot] = nSeq;
 					}

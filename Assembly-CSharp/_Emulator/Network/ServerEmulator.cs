@@ -1735,7 +1735,6 @@ namespace _Emulator
 				{
 					body.Write((int)client.inventory.weaponChg[i].toolSlot);
 					body.Write(client.inventory.weaponChg[i].Seq);
-                    Debug.Log("Sending slot " + (int)client.inventory.weaponChg[i].toolSlot);
 				}
 			}
 

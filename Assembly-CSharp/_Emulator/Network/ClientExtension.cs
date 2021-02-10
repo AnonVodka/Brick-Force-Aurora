@@ -88,8 +88,6 @@ namespace _Emulator
             {
                 gameObject.BroadcastMessage("OnSeed");
             }
-
-            Debug.Log("Connected to channel");
         }
 
         private void HandleDisconnected(MsgBody msg)

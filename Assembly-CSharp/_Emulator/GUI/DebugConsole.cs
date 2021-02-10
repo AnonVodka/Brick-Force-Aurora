@@ -18,7 +18,7 @@ namespace _Emulator
         Vector2 scrollPosition;
         bool hidden = true;
         bool collapse = true;
-        bool externConsole = true;
+        bool externConsole = false;
 
 
         static readonly Dictionary<LogType, Color> logTypeColors = new Dictionary<LogType, Color>()

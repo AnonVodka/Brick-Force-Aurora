@@ -71,8 +71,6 @@ namespace _Emulator
 
 		private void hP2PManagerHandshake()
         {
-            Debug.Log("Doing P2P Handshake");
-
 			if (MyInfoManager.Instance.Status == 3 || MyInfoManager.Instance.Status == 4)
 			{
 				bool flag = false;
@@ -341,7 +339,8 @@ namespace _Emulator
 					else
 					{
 						Item itemBySequence = MyInfoManager.Instance.GetItemBySequence(seq);
-						if (itemBySequence != null && itemBySequence.Template != null && itemBySequence.Template.type == TItem.TYPE.WEAPON)
+						if (itemBySequence != null && itemBySequence.Template != null 
+                            && itemBySequence.Template.type == TItem.TYPE.WEAPON)
 						{
 							MyInfoManager.Instance.WeaponSlots[slot] = seq;
 						}

@@ -511,7 +511,7 @@ namespace _Emulator
                 catKinds = new int[9] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
             }
 
-            allItems = GetItemsByCat(catTypes[otherCatType], (otherCatKind < 2 ? catKinds[otherCatKind] : -1));
+            allItems = GetItemsByCat(catTypes[otherCatType], (otherCatType < 2 ? catKinds[otherCatKind] : -1));
             
             int allItemCount = allItems.Length;
             int itemsPerRow = 6;
