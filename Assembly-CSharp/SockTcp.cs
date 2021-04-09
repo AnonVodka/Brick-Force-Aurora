@@ -4628,21 +4628,21 @@ public class SockTcp
 
 	private void HandleCS_ROOM_CONFIG_ACK(MsgBody msg)
 	{
-		msg.Read(out int val);
-		msg.Read(out string val2);
-		msg.Read(out int val3);
-		msg.Read(out int val4);
-		msg.Read(out int val5);
-		msg.Read(out bool val6);
-		msg.Read(out bool val7);
-		msg.Read(out bool val8);
-		msg.Read(out string val9);
-		msg.Read(out byte val10);
-		msg.Read(out int val11);
-		msg.Read(out bool val12);
-		msg.Read(out bool val13);
-		RoomManager.Instance.SetConfig(val9, val, val2, val3, val4, val5, val6, val7, val8, val10, val12, val13);
-		if (RoomManager.Instance.HaveCurrentRoomInfo && RoomManager.Instance.CurrentRoomType != (Room.ROOM_TYPE)val11)
+		msg.Read(out int map);
+		msg.Read(out string curMapAlias);
+		msg.Read(out int weaponOptions);
+		msg.Read(out int timeLimit);
+		msg.Read(out int goal);
+		msg.Read(out bool isBreakInto);
+		msg.Read(out bool isBalance);
+		msg.Read(out bool useBuildGun);
+		msg.Read(out string password);
+		msg.Read(out byte commented);
+		msg.Read(out int roomType);
+		msg.Read(out bool isDropItem);
+		msg.Read(out bool isWanted);
+		RoomManager.Instance.SetConfig(password, map, curMapAlias, weaponOptions, timeLimit, goal, isBreakInto, isBalance, useBuildGun, commented, isDropItem, isWanted);
+		if (RoomManager.Instance.HaveCurrentRoomInfo && RoomManager.Instance.CurrentRoomType != (Room.ROOM_TYPE)roomType)
 		{
 			if (RoomManager.Instance.CurrentRoomType == Room.ROOM_TYPE.MISSION || RoomManager.Instance.CurrentRoomType == Room.ROOM_TYPE.BUNGEE)
 			{
@@ -4651,7 +4651,7 @@ public class SockTcp
 					RoomManager.Instance.SlotStatus[i] = true;
 				}
 			}
-			if (val11 == 5 || val11 == 7)
+			if (roomType == 5 || roomType == 7)
 			{
 				for (int j = 0; j < 16; j++)
 				{
@@ -4662,7 +4662,7 @@ public class SockTcp
 			{
 				CSNetManager.Instance.Sock.SendCS_RESUME_ROOM_REQ(0);
 			}
-			RoomManager.Instance.GetCurrentRoomInfo().Type = (Room.ROOM_TYPE)val11;
+			RoomManager.Instance.GetCurrentRoomInfo().Type = (Room.ROOM_TYPE)roomType;
 		}
 	}
 

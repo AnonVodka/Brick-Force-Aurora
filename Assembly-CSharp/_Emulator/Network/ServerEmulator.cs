@@ -266,7 +266,11 @@ namespace _Emulator
 					HandleEquipRequest(msgRef);
 					break;
 
-				case 42:
+                case 37: // NEW
+                    HandleUnequipRequest(msgRef);
+                    break;
+
+                case 42:
 					HandleLoadComplete(msgRef);
 					break;
 
@@ -1128,7 +1132,35 @@ namespace _Emulator
 			}
 		}
 
-		private void HandleClearShooterTools(MsgReference msgRef)
+        private void HandleUnequipRequest(MsgReference msgRef)
+        {
+            msgRef.msg._msg.Read(out long itemSeq);
+
+            if (debugHandle)
+                Debug.LogWarning("HandleUnequipRequest from: " + msgRef.client.GetIdentifier());
+
+            Item item = msgRef.client.inventory.equipment.Find(x => x.Seq == itemSeq);
+            if (item != null)
+            {
+                if (!item.IsEquipable)
+                    return;
+
+                int index = Inventory.SlotToIndex(item.Template.slot);
+                if (index != -1 && index < msgRef.client.inventory.activeSlots.Length)
+                {
+                    Item oldItem = msgRef.client.inventory.activeSlots[index];
+                    if (oldItem != null)
+                    {
+                        item.Usage = Item.USAGE.UNEQUIP;
+                        msgRef.client.inventory.GenerateActiveSlots();
+
+                        SendUnequip(msgRef.client, item.Seq, item.Code);
+                    }
+                }
+            }
+        }
+
+        private void HandleClearShooterTools(MsgReference msgRef)
 		{
 			if (debugHandle)
 				Debug.LogWarning("HandleClearShooterTools from: " + msgRef.client.GetIdentifier());

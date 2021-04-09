@@ -285,6 +285,7 @@ namespace _Emulator
             GenerateActiveTools();
             GenerateActiveChange();
         }
+
         public static int SlotToIndex(TItem.SLOT slot)
         {
             switch (slot)

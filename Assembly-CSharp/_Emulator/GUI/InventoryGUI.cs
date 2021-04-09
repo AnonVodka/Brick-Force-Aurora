@@ -50,11 +50,11 @@ namespace _Emulator
 
         private Rect crdAddWeapon = new Rect(566f, 677f , 136f, 34f);
 
-        private int curItem = -1;
+        private int selectedItem = -1;
 
         private TItem[] allItems;
 
-        private Vector2 scrollPositionWeaponSlot = new Vector2(0f, 0f);
+        private Vector2 scrollPositionOthers = new Vector2(0f, 0f);
 
         private Vector2 scrollPositionWeapon = new Vector2(0f, 0f);
 
@@ -124,6 +124,10 @@ namespace _Emulator
         private int otherCatKind;
 
         Dictionary<string, TItem> activeDic;
+
+        private float lastClickTime;
+
+        private float doubleClickTimeout = 0.2f;
 
         public TItem[] GetItemsByCat(int catType, int catKind, int category = -1)
         {
@@ -204,9 +208,18 @@ namespace _Emulator
 
         private void ShowItemStatus(TItem item)
         {
-            if (ClientExtension.instance.inventory.equipment.Exists(x => x.Template.code == item.code))
+            Item it = ClientExtension.instance.inventory.equipment.Find(x => x.Template.code == item.code);
+
+            if (it != null)
             {
-                LabelUtil.TextOut(crdItemStatus, "IN INVENTORY", "MiniLabel", GlobalVars.Instance.GetByteColor2FloatColor(byte.MaxValue, 72, 48), Color.black, TextAnchor.MiddleRight);
+                if (it.Usage == Item.USAGE.EQUIP)
+                {
+                    LabelUtil.TextOut(crdItemStatus, "EQUIPPED", "MiniLabel", GlobalVars.Instance.GetByteColor2FloatColor(72, 255, 48), Color.black, TextAnchor.MiddleRight);
+                }
+                else
+                {
+                    LabelUtil.TextOut(crdItemStatus, "IN INVENTORY", "MiniLabel", GlobalVars.Instance.GetByteColor2FloatColor(255, 72, 48), Color.black, TextAnchor.MiddleRight);
+                }
             }
         }
 
@@ -217,81 +230,167 @@ namespace _Emulator
             GUI.color = color;
         }
 
+        private void DoItemList(TItem[] items,  Vector2 scrollPosition, Rect posList)
+        {
+            int allItemCount = allItems.Length;
+            int itemsPerRow = 6;
+            int curRow = allItemCount / itemsPerRow;
+
+            if (allItemCount % itemsPerRow > 0) curRow++;
+
+            float xPosition = crdItem.x * (float)itemsPerRow;
+
+            if (itemsPerRow > 1) xPosition += (float)((itemsPerRow - 1) * 2);
+
+            float yPosition = crdItem.y * (float)curRow;
+
+            if (curRow > 0) yPosition -= this.yOffset;
+
+            scrollPosition = GUI.BeginScrollView(viewRect: new Rect(0f, 0f, posList.width - 20f, yPosition), position: posList, scrollPosition: scrollPosition, alwaysShowHorizontal: false, alwaysShowVertical: false);
+            float y = scrollPosition.y;
+            float num7 = y + posList.height;
+            Rect position = new Rect(0f, 0f, crdItem.x, crdItem.y);
+
+            int _i = 0;
+            int num8 = 0;
+
+            while (_i < allItemCount && num8 < curRow)
+            {
+                position.y = (float)num8 * crdItem.y;
+                float y2 = position.y;
+                float num9 = y2 + position.height;
+                int num10 = 0;
+
+                while (_i < allItemCount && num10 < itemsPerRow)
+                {
+                    if (num9 >= y && y2 <= num7)
+                    {
+                        position.x = (float)num10 * (crdItem.x + 2f);
+                        GUI.BeginGroup(position);
+                        TItem tItem = allItems[_i];
+                        string str = tItem.season == 2 ? "BtnItem2" : "BtnItem";
+
+                        if (GUI.Button(crdItemBtn, new GUIContent(string.Empty, allItems[_i].Name), str))
+                        {
+                            selectedItem = _i;
+                            if (Time.time - lastClickTime < doubleClickTimeout)
+                            {
+                                TItem item = allItems[selectedItem];
+                                if (ClientExtension.instance.inventory.equipment.Exists(x => x.Template.code == item.code))
+                                {
+                                    // item is in our inventory, so ...
+                                    Item it = ClientExtension.instance.inventory.equipment.Find(x => x.Template.code == item.code);
+                                    if (it.Usage == Item.USAGE.EQUIP)
+                                    {
+                                        // ... unequip it
+                                        CSNetManager.Instance.Sock.SendCS_UNEQUIP_REQ(it.Seq);
+
+                                    }
+                                    else if (it.Usage == Item.USAGE.UNEQUIP)
+                                    {
+                                        // ... equip it
+                                        GlobalVars.Instance.PlaySoundItemInstall();
+
+                                        Item slotItem = ClientExtension.instance.inventory.equipment.Find(x => x.Template.slot == item.slot);
+
+                                        if (slotItem != null) // slot is already occupied so we need to unequip the current item
+                                            CSNetManager.Instance.Sock.SendCS_UNEQUIP_REQ(slotItem.Seq);
+
+                                        CSNetManager.Instance.Sock.SendCS_EQUIP_REQ(it.Seq);
+                                    }
+
+                                    ClientExtension.instance.inventory.UpdateCSV();
+                                    ClientExtension.instance.SendInventoryCSV();
+                                }
+                                else
+                                {
+                                    // Item isnt in our inventory, so add it
+                                    ClientExtension.instance.inventory.AddItem(item, true);
+                                    ClientExtension.instance.inventory.UpdateCSV();
+                                    ClientExtension.instance.SendInventoryCSV();
+                                }
+                            }
+                            else
+                            {
+                                lastClickTime = Time.time;
+                            }
+                        }
+
+                        DrawItemIcon(crdIcon: new Rect(crdItemBtn.x + 4f, crdItemBtn.y + 14f, (float)(int)((double)tItem.CurIcon().width * 0.65), (float)(int)((double)tItem.CurIcon().height * 0.65)), item: allItems[_i]);
+                        Color color = GUI.color;
+                        GUI.color = GlobalVars.Instance.txtMainColor;
+                        GUI.Label(crdItemBtn, tItem.Name, "MiniLabel");
+                        GUI.color = color;
+                        ShowItemStatus(allItems[_i]);
+                        if (_i == selectedItem)
+                        {
+                            GUI.Box(new Rect(crdItemBtn.x - 3f, crdItemBtn.y - 3f, crdItemBtn.width + 6f, crdItemBtn.height + 6f), string.Empty, "BtnItemF");
+                        }
+                        GUI.EndGroup();
+                    }
+                    _i++;
+                    num10++;
+                }
+                num8++;
+            }
+            GUI.EndScrollView();
+        }
+
         private void DoTitle()
         {
             Vector2 pos = new Vector2(size.x / 2f, 10f);
             LabelUtil.TextOut(pos, "Inventory editor", "BigLabel", GlobalVars.Instance.txtMainColor, new Color(0f, 0f, 0f, 0f), TextAnchor.UpperCenter);
         }
 
+        private void DoInventoryButtons(TItem item)
+        {
+            GUIContent content = new GUIContent("ADD", GlobalVars.Instance.iconEquip);
+            if (GlobalVars.Instance.MyButton3(crdAddWeapon, content, "BtnAction") && item != null)
+            {
+                GlobalVars.Instance.PlaySoundItemInstall();
+                ClientExtension.instance.inventory.AddItem(item, true);
+
+                ClientExtension.instance.inventory.UpdateCSV();
+                ClientExtension.instance.SendInventoryCSV();
+            }
+            content = new GUIContent("REMOVE", GlobalVars.Instance.iconCancel);
+            if (GlobalVars.Instance.MyButton3(crdRemoveWeapon, content, "BtnAction"))
+            {
+                Item it = ClientExtension.instance.inventory.equipment.Find(x => x.Template.code == item.code);
+                if (it != null)
+                    ClientExtension.instance.inventory.RemoveItem(it);
+
+                ClientExtension.instance.inventory.UpdateCSV();
+                ClientExtension.instance.SendInventoryCSV();
+            }
+            content = new GUIContent("SAVE");
+            if (GlobalVars.Instance.MyButton3(crdSaveInventory, content, "BtnAction"))
+            {
+                ClientExtension.instance.inventory.UpdateCSV();
+                ClientExtension.instance.inventory.Save();
+                ClientExtension.instance.SendInventoryCSV();
+            }
+            content = new GUIContent("UPDATE");
+            if (GlobalVars.Instance.MyButton3(crdUpdateInventory, content, "BtnAction"))
+            {
+                ClientExtension.instance.inventory.UpdateCSV();
+                ClientExtension.instance.SendInventoryCSV();
+            }
+            content = new GUIContent("LOAD");
+            if (GlobalVars.Instance.MyButton3(crdLoadInventory, content, "BtnAction"))
+            {
+                ClientExtension.instance.inventory.LoadInventoryFromDisk();
+                ClientExtension.instance.inventory.Sort();
+                ClientExtension.instance.SendInventoryCSV();
+            }
+        }
+
         private void DoShooterTools()
         {
             GUI.Box(crdItemActionOutline, string.Empty, "LineBoxBlue");
-            int num = 0;
             allItems = GetItemsByCat(5, -1);
-            int num2 = allItems.Length;
-            int num3 = 6;
-            int num4 = num2 / num3;
-            if (num2 % num3 > 0)
-            {
-                num4++;
-            }
-            float num5 = crdItem.x * (float)num3;
-            if (num3 > 1)
-            {
-                num5 += (float)((num3 - 1) * 2);
-            }
-            float num6 = crdItem.y * (float)num4;
-            if (num4 > 0)
-            {
-                num6 -= yOffset;
-            }
-            scrollPositionShooterTool = GUI.BeginScrollView(viewRect: new Rect(0f, 0f, crdShooterToolList.width - 20f, num6), position: crdShooterToolList, scrollPosition: scrollPositionShooterTool, alwaysShowHorizontal: false, alwaysShowVertical: false);
-            float y = scrollPositionShooterTool.y;
-            float num7 = y + crdShooterToolList.height;
-            Rect position = new Rect(0f, 0f, crdItem.x, crdItem.y);
-            num = 0;
-            int num8 = 0;
-            while (num < num2 && num8 < num4)
-            {
-                position.y = (float)num8 * crdItem.y;
-                float y2 = position.y;
-                float num9 = y2 + position.height;
-                int num10 = 0;
-                while (num < num2 && num10 < num3)
-                {
-                    if (num9 >= y && y2 <= num7)
-                    {
-                        position.x = (float)num10 * (crdItem.x + 2f);
-                        GUI.BeginGroup(position);
-                        TItem tItem = allItems[num];
-                        string str = "BtnItem";
-                        if (tItem.season == 2)
-                        {
-                            str = "BtnItem2";
-                        }
-                        if (GUI.Button(crdItemBtn, new GUIContent(string.Empty, allItems[num].Name), str))
-                        {
-                            curItem = num;
-                        }
-                        DrawItemIcon(crdIcon: new Rect(crdItemBtn.x + 4f, crdItemBtn.y + 14f, (float)(int)((double)tItem.CurIcon().width * 0.65), (float)(int)((double)tItem.CurIcon().height * 0.65)), item: allItems[num]);
-                        Color color = GUI.color;
-                        GUI.color = GlobalVars.Instance.txtMainColor;
-                        GUI.Label(crdItemBtn, tItem.Name, "MiniLabel");
-                        GUI.color = color;
-                        ShowItemStatus(allItems[num]);
-                        if (num == curItem)
-                        {
-                            GUI.Box(new Rect(crdItemBtn.x - 3f, crdItemBtn.y - 3f, crdItemBtn.width + 6f, crdItemBtn.height + 6f), string.Empty, "BtnItemF");
-                        }
-                        GUI.EndGroup();
-                    }
-                    num++;
-                    num10++;
-                }
-                num8++;
-            }
-            GUI.EndScrollView();
-            DoWeaponButtons((0 > curItem || curItem >= allItems.Length) ? null : allItems[curItem]);
+            DoItemList(allItems, scrollPositionShooterTool, crdShooterToolList);
+            DoInventoryButtons((0 > selectedItem || selectedItem >= allItems.Length) ? null : allItems[selectedItem]);
         }
 
         private void DoWeaponTab()
@@ -324,129 +423,19 @@ namespace _Emulator
         {
             GUI.Box(crdItemWeaponOutline, string.Empty, "LineBoxBlue");
 
-            int num = 0;
             int[] catKind = new int[4] { 3, 1, 0, 2 };
 
             allItems = GetItemsByCat(1, weaponKind, (weaponKind != 1) ? (-1) : catKind[mainKind]);
-            int allItemCount = allItems.Length;
-            int itemsPerRow = 6;
-            int curRow = allItemCount / itemsPerRow;
-            if (allItemCount % itemsPerRow > 0)
-            {
-                curRow++;
-            }
-            float xPosition = crdItem.x * (float)itemsPerRow;
-            if (itemsPerRow > 1)
-            {
-                xPosition += (float)((itemsPerRow - 1) * 2);
-            }
-            float yPosition = crdItem.y * (float)curRow;
-            if (curRow > 0)
-            {
-                yPosition -= this.yOffset;
-            }
             Rect position = crdWeaponList;
             if (weaponKind == 1)
             {
                 position = crdMainWeaponList;
             }
 
-            scrollPositionWeapon = GUI.BeginScrollView(viewRect: new Rect(0f, 0f, position.width - 20f, yPosition), position: position, scrollPosition: scrollPositionWeapon, alwaysShowHorizontal: false, alwaysShowVertical: false);
-            float y = scrollPositionWeapon.y;
-            float num7 = y + position.height;
-            Rect position2 = new Rect(0f, 0f, crdItem.x, crdItem.y);
-            num = 0;
-            int num8 = 0;
-            while (num < allItemCount && num8 < curRow)
-            {
-                position2.y = (float)num8 * crdItem.y;
-                float y2 = position2.y;
-                float num9 = y2 + position2.height;
-                int num10 = 0;
-                while (num < allItemCount && num10 < itemsPerRow)
-                {
-                    if (num9 >= y && y2 <= num7)
-                    {
-                        position2.x = (float)num10 * (crdItem.x + 2f);
-                        GUI.BeginGroup(position2);
-                        TItem tItem = allItems[num];
-                        string str = "BtnItem";
-                        if (tItem.season == 2)
-                        {
-                            str = "BtnItem2";
-                        }
-                        if (GUI.Button(crdItemBtn, new GUIContent(string.Empty, allItems[num].Name), str))
-                        {
-                            curItem = num;
-                        }
-                        DrawItemIcon(crdIcon: new Rect(crdItemBtn.x + 4f, crdItemBtn.y + 14f, (float)(int)((double)tItem.CurIcon().width * 0.65), (float)(int)((double)tItem.CurIcon().height * 0.65)), item: allItems[num]);
-                        Color color = GUI.color;
-                        GUI.color = GlobalVars.Instance.txtMainColor;
-                        GUI.Label(crdItemBtn, tItem.Name, "MiniLabel");
-                        GUI.color = color;
-                        ShowItemStatus(allItems[num]);
-                        if (num == curItem)
-                        {
-                            GUI.Box(new Rect(crdItemBtn.x - 3f, crdItemBtn.y - 3f, crdItemBtn.width + 6f, crdItemBtn.height + 6f), string.Empty, "BtnItemF");
-                        }
-                        GUI.EndGroup();
-                    }
-                    num++;
-                    num10++;
-                }
-                num8++;
-            }
-            
-            GUI.EndScrollView();
+            DoItemList(allItems, scrollPositionWeapon, position);
+
             DoWeaponTab();
-
-            DoWeaponButtons((0 > curItem || curItem >= allItems.Length) ? null : allItems[curItem]);
-        }
-
-        private void DoWeaponButtons(TItem item)
-        {
-            GUIContent content = new GUIContent("ADD", GlobalVars.Instance.iconEquip);
-            if (GlobalVars.Instance.MyButton3(crdAddWeapon, content, "BtnAction") && item != null)
-            {
-                GlobalVars.Instance.PlaySoundItemInstall();
-                ClientExtension.instance.inventory.AddItem(item, true);
-
-                ClientExtension.instance.inventory.UpdateCSV();
-                ClientExtension.instance.SendInventoryCSV();
-            }
-            content = new GUIContent("REMOVE", GlobalVars.Instance.iconCancel);
-            if (GlobalVars.Instance.MyButton3(crdRemoveWeapon, content, "BtnAction"))
-            {
-                // find a way to convert TItem to Item
-                ClientExtension.instance.inventory.equipment.ForEach(delegate (Item it)
-                {
-                    if (it.Code == item.code)
-                        ClientExtension.instance.inventory.RemoveItem(it);
-                });
-
-                ClientExtension.instance.inventory.UpdateCSV();
-                ClientExtension.instance.SendInventoryCSV();
-            }
-            content = new GUIContent("SAVE");
-            if (GlobalVars.Instance.MyButton3(crdSaveInventory, content, "BtnAction"))
-            {
-                ClientExtension.instance.inventory.UpdateCSV();
-                ClientExtension.instance.inventory.Save();
-                ClientExtension.instance.SendInventoryCSV();
-            }
-            content = new GUIContent("UPDATE");
-            if (GlobalVars.Instance.MyButton3(crdUpdateInventory, content, "BtnAction"))
-            {
-                ClientExtension.instance.inventory.UpdateCSV();
-                ClientExtension.instance.SendInventoryCSV();
-            }
-            content = new GUIContent("LOAD");
-            if (GlobalVars.Instance.MyButton3(crdLoadInventory, content, "BtnAction"))
-            {
-                ClientExtension.instance.inventory.LoadInventoryFromDisk();
-                ClientExtension.instance.inventory.Sort();
-                ClientExtension.instance.SendInventoryCSV();
-            }
+            DoInventoryButtons((0 > selectedItem || selectedItem >= allItems.Length) ? null : allItems[selectedItem]);
         }
 
         private void DoOthersTab()
@@ -499,93 +488,25 @@ namespace _Emulator
         {
             GUI.Box(crdItemWeaponOutline, string.Empty, "LineBoxBlue");
 
-            int num = 0;
             int[] catTypes = new int[8] { 2, 3, 4, 6, 7, 8, 0, -1 };
             int[] catKinds = new int[10] { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
             if (otherCatType == 0)
-            {
                 catKinds = new int[4] { 0, 1, 2, 3 };
-            }
             else if (otherCatType == 1)
-            {
                 catKinds = new int[9] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            }
 
             allItems = GetItemsByCat(catTypes[otherCatType], (otherCatType < 2 ? catKinds[otherCatKind] : -1));
-            
-            int allItemCount = allItems.Length;
-            int itemsPerRow = 6;
-            int curRow = allItemCount / itemsPerRow;
-            if (allItemCount % itemsPerRow > 0)
-            {
-                curRow++;
-            }
-            float xPosition = crdItem.x * (float)itemsPerRow;
-            if (itemsPerRow > 1)
-            {
-                xPosition += (float)((itemsPerRow - 1) * 2);
-            }
-            float yPosition = crdItem.y * (float)curRow;
-            if (curRow > 0)
-            {
-                yPosition -= this.yOffset;
-            }
+
             Rect position = crdWeaponList;
             if (otherCatType == 0 || otherCatType == 1)
             {
                 position = crdMainWeaponList;
             }
 
-            scrollPositionWeapon = GUI.BeginScrollView(viewRect: new Rect(0f, 0f, position.width - 20f, yPosition), position: position, scrollPosition: scrollPositionWeapon, alwaysShowHorizontal: false, alwaysShowVertical: false);
-            float y = scrollPositionWeapon.y;
-            float num7 = y + position.height;
-            Rect position2 = new Rect(0f, 0f, crdItem.x, crdItem.y);
-            num = 0;
-            int num8 = 0;
-            while (num < allItemCount && num8 < curRow)
-            {
-                position2.y = (float)num8 * crdItem.y;
-                float y2 = position2.y;
-                float num9 = y2 + position2.height;
-                int num10 = 0;
-                while (num < allItemCount && num10 < itemsPerRow)
-                {
-                    if (num9 >= y && y2 <= num7)
-                    {
-                        position2.x = (float)num10 * (crdItem.x + 2f);
-                        GUI.BeginGroup(position2);
-                        TItem tItem = allItems[num];
-                        string str = "BtnItem";
-                        if (tItem.season == 2)
-                        {
-                            str = "BtnItem2";
-                        }
-                        if (GUI.Button(crdItemBtn, new GUIContent(string.Empty, allItems[num].Name), str))
-                        {
-                            curItem = num;
-                        }
-                        DrawItemIcon(crdIcon: new Rect(crdItemBtn.x + 4f, crdItemBtn.y + 14f, (float)(int)((double)tItem.CurIcon().width * 0.65), (float)(int)((double)tItem.CurIcon().height * 0.65)), item: allItems[num]);
-                        Color color = GUI.color;
-                        GUI.color = GlobalVars.Instance.txtMainColor;
-                        GUI.Label(crdItemBtn, tItem.Name, "MiniLabel");
-                        GUI.color = color;
-                        ShowItemStatus(allItems[num]);
-                        if (num == curItem)
-                        {
-                            GUI.Box(new Rect(crdItemBtn.x - 3f, crdItemBtn.y - 3f, crdItemBtn.width + 6f, crdItemBtn.height + 6f), string.Empty, "BtnItemF");
-                        }
-                        GUI.EndGroup();
-                    }
-                    num++;
-                    num10++;
-                }
-                num8++;
-            }
-
-            GUI.EndScrollView();
+            DoItemList(allItems, scrollPositionOthers, position);
 
             DoOthersTab();
-            DoWeaponButtons((0 > curItem || curItem >= allItems.Length) ? null : allItems[curItem]);
+            DoInventoryButtons((0 > selectedItem || selectedItem >= allItems.Length) ? null : allItems[selectedItem]);
         }
 
         private void DoMainTab()
